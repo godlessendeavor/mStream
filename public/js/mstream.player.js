@@ -1,3 +1,4 @@
+
 var MSTREAMPLAYER = (function () {
   let mstreamModule = {};
 
@@ -5,6 +6,7 @@ var MSTREAMPLAYER = (function () {
   mstreamModule.positionCache = { val: -1 };
   mstreamModule.playlist = [];
   var cacheTimeout = 30000;
+  var source;
 
   mstreamModule.editSongMetadata = function (key, value, songIndex) {
     for (var i = 0, len = mstreamModule.playlist.length; i < len; i++) {
@@ -165,10 +167,11 @@ var MSTREAMPLAYER = (function () {
 
 
   mstreamModule.goToSongAtPosition = function (position) {
-    console.log('GO GO GOG O')
+    console.log('GO GO GO GO')
     if (!mstreamModule.playlist[position]) {
       return false;
     }
+    console.log('Number of songs in playlist is %d', mstreamModule.playlist.length)
 
     clearEnd();
 
@@ -408,6 +411,7 @@ var MSTREAMPLAYER = (function () {
       autoDJ();
     }
 
+
     var localPlayerObject = getCurrentPlayer();
     var otherPlayerObject = getOtherPlayer();
 
@@ -443,7 +447,7 @@ var MSTREAMPLAYER = (function () {
       var audioCtx =  VIZ.get();
       var analyser = audioCtx.createAnalyser();
       try {
-        var source = audioCtx.createMediaElementSource(lPlayer.playerObject._sounds[0]._node);
+        source = audioCtx.createMediaElementSource(lPlayer.playerObject._sounds[0]._node);
         source.connect(analyser);
         source.connect(audioCtx.destination);
         VIZ.connect(analyser);
@@ -497,8 +501,17 @@ var MSTREAMPLAYER = (function () {
     if (curSong.metadata) {
       mstreamModule.playerStats.metadata.artist = curSong.metadata.artist;
       mstreamModule.playerStats.metadata.album = curSong.metadata.album;
-      mstreamModule.playerStats.metadata.track = curSong.metadata.track;
-      mstreamModule.playerStats.metadata.title = curSong.metadata.title;
+      if (curSong.metadata.track) {
+        mstreamModule.playerStats.metadata.track = curSong.metadata.track;
+      } else {
+        mstreamModule.playerStats.metadata.track = curSong.filepath;
+      }
+      if (curSong.metadata.title){
+        mstreamModule.playerStats.metadata.title = curSong.metadata.title;
+      }
+      else{
+        mstreamModule.playerStats.metadata.title = curSong.filepath;
+      }
       mstreamModule.playerStats.metadata.year = curSong.metadata.year;
       mstreamModule.playerStats.metadata['album-art'] = curSong.metadata['album-art'];
     }
@@ -635,6 +648,7 @@ var MSTREAMPLAYER = (function () {
         // TODO: Force cache to start
       },
       onend: function () {
+        source.disconnect();
         callMeOnStreamEnd();
       },
       onpause: function () {
@@ -656,7 +670,7 @@ var MSTREAMPLAYER = (function () {
         song.error = true;
         if (iziToast) {
           iziToast.error({
-            title: 'Failed To Play Song',
+            title: 'Failed to play song',
             position: 'topCenter',
             timeout: 3500
           });
