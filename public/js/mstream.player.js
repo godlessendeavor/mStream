@@ -501,16 +501,12 @@ var MSTREAMPLAYER = (function () {
     if (curSong.metadata) {
       mstreamModule.playerStats.metadata.artist = curSong.metadata.artist;
       mstreamModule.playerStats.metadata.album = curSong.metadata.album;
-      if (curSong.metadata.track) {
-        mstreamModule.playerStats.metadata.track = curSong.metadata.track;
-      } else {
-        mstreamModule.playerStats.metadata.track = curSong.filepath;
-      }
+      mstreamModule.playerStats.metadata.track = curSong.metadata.track;
       if (curSong.metadata.title){
         mstreamModule.playerStats.metadata.title = curSong.metadata.title;
-      }
-      else{
-        mstreamModule.playerStats.metadata.title = curSong.filepath;
+      }else
+      {
+        mstreamModule.playerStats.metadata.title = curSong.filepath; 
       }
       mstreamModule.playerStats.metadata.year = curSong.metadata.year;
       mstreamModule.playerStats.metadata['album-art'] = curSong.metadata['album-art'];
@@ -648,7 +644,6 @@ var MSTREAMPLAYER = (function () {
         // TODO: Force cache to start
       },
       onend: function () {
-        source.disconnect();
         callMeOnStreamEnd();
       },
       onpause: function () {
