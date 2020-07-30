@@ -152,47 +152,6 @@
     <textarea class="share-textarea" rows="8" cols="60" placeholder="Your URL will be put here" readonly="readonly"></textarea>
   </div>
 
-  <!-- Federation Modal 1 -->
-  <div id="generateFederationInvite" class="hide">
-    <form id="generateInviteForm">
-      <label class="invite-federation-url" for="invite-public-url"><b>Federation URL</b></label>
-      <input class="invite-federation-url" autocomplete="off" id="invite-public-url" type="text" required>
-
-      <label class="invite-federation-id" for="invite-federation-id"><b>Federation ID</b></label>
-      <input placeholder="xxxxxxx-xxxxxxx-xxxxxxx-xxxxxxx-xxxxxxx-xxxxxxx" autocomplete="off"class="invite-federation-id" id="invite-federation-id" type="text" required>
-
-      <div class="row collapse">
-        <div class="small-12 medium-8 columns">
-          <label><b>Folders to share</b></label>
-          <div id="federation-invite-checkbox-area"></div>
-        </div>
-        <div class="small-12 medium-4 columns">
-          <label><b>Expires In</b></label>
-          <input id="federation-invite-time" value="14" class="form-control" type="text" pattern="[0-9]+">
-          <span class="share-time-post postfix radius">Days</span>
-          <br>
-          <input id="federation-invite-forever" type="checkbox" name="forever" value="forever">
-          <label for="federation-invite-forever">No Expiration</label>
-        </div>
-      </div>
-      <input id="generate-invite" type="submit" class="" value="Create Invite">
-    </form>
-    <textarea id="fed-textarea" rows="16" cols="60" placeholder="Your invite token will be put here" readonly="readonly"></textarea>
-    <a href="#" class="fed-copy-button" data-clipboard-target="#fed-textarea">Copy To Clipboard</a>
-  </div>
-
-  <!-- Federation Modal 2 -->
-  <div id="acceptFederationInvite" class="hide">
-    <form id="acceptInvitationForm">
-      <label for="federation-invitation-code"><b>Federation Code</b></label>
-      <textarea id="federation-invitation-code" rows="16" cols="60" required placeholder="Paste your invitation code here. mStream will start syncing immediately"></textarea>
-      <div id="federation-invite-selection-panel">
-
-      </div>
-      <input id="invitation-submit" type="submit" class="" value="Submit">
-    </form>
-  </div>
-
   <!-- Download iFrame -->
   <form id="downform" action="" target="frameframe" method="POST"></form>
   <iframe id="downframe" src="" width="0" height="0" tabindex="-1" title="empty" hidden name="frameframe"></iframe>
@@ -287,10 +246,6 @@
               <svg xmlns="http://www.w3.org/2000/svg" fill="#DDD" width="24" height="24" viewBox="0 0 55.334 55.334"><g><circle cx="27.667" cy="27.667" r="3.618"/><path d="M27.667 0C12.387 0 0 12.387 0 27.667s12.387 27.667 27.667 27.667 27.667-12.387 27.667-27.667S42.947 0 27.667 0zM17.118 6.881a23.213 23.213 0 0111.214-2.509c.367.01.619.922.564 2.025l-.282 5.677c-.055 1.103-.289 1.986-.523 1.979a13.577 13.577 0 00-6.027 1.196c-1.007.455-2.212.184-2.774-.767l-2.896-4.897c-.562-.951-.261-2.203.724-2.704zm-1.132 10.414l-4.278-3.742c-.832-.727-.918-1.994-.119-2.756l.057-.053c.802-.76 2.059-.605 2.737.266l3.494 4.484c.679.871.837 1.889.391 2.314-.447.427-1.45.214-2.282-.513zm1.891 10.372c0-5.407 4.383-9.79 9.79-9.79s9.79 4.383 9.79 9.79-4.383 9.79-9.79 9.79-9.79-4.383-9.79-9.79zM38.17 48.476a23.21 23.21 0 01-11.244 2.484c-.409-.013-.692-.929-.632-2.032l.31-5.676c.061-1.103.322-1.981.586-1.972a13.596 13.596 0 005.656-1.01c1.022-.42 2.275-.144 2.877.782l3.101 4.77c.602.925.332 2.155-.654 2.654zm5.449-3.82c-.766.72-2.005.551-2.703-.305l-3.59-4.407c-.698-.856-.876-1.848-.435-2.255.442-.407 1.443-.179 2.274.549l4.28 3.744c.832.727.941 1.954.174 2.674z"/></g></svg>
               Auto DJ
             </li>
-            <li class="federation-panel">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
-              Federation
-            </li>
             <li class="transcode-panel">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48"><path id="ffmpeg-logo" fill="none" stroke="#DDD" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M8.5 8.5h9l-9 9v11l20-20h11l-31 31h11l20-20v11l-9 9h9"/></svg>
               Transcode
@@ -298,10 +253,6 @@
             <li class="mobile-panel">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M15.5 1h-8C6.12 1 5 2.12 5 3.5v17C5 21.88 6.12 23 7.5 23h8c1.38 0 2.5-1.12 2.5-2.5v-17C18 2.12 16.88 1 15.5 1zm-4 21c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4.5-4H7V4h9v14z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
               Mobile
-            </li>
-            <li v-bind:class="{ 'aux-button-active-2': jukebox.live }" class="jukebox_mode">
-              <svg v-bind:class="{ 'aux-button-active-2': jukebox.live }" height="24" width="24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 65 65" enable-background="new 0 0 65 65" xml:space="preserve"><g><path d="M36.1,14.4c-1.4-1.4-3.9-1.4-5.3,0L1.1,44.1c-1.4,1.4-1.4,3.8,0,5.3l14.5,14.5c0.7,0.7,1.6,1.1,2.6,1.1   c1,0,1.9-0.4,2.6-1.1l29.7-29.7c1.5-1.4,1.5-3.8,0-5.3L36.1,14.4z M49.5,33.2L19.8,62.9c-0.8,0.8-2.3,0.8-3.2,0L2.1,48.3   c-0.9-0.9-0.9-2.3,0-3.2l29.7-29.7c0.4-0.4,1-0.7,1.6-0.7c0.6,0,1.2,0.2,1.6,0.7L49.5,30C50.4,30.9,50.4,32.3,49.5,33.2z"></path><rect x="32.4" y="19.5" transform="matrix(0.707 0.7072 -0.7072 0.707 24.3992 -18.4628)" width="4.2" height="1.5"></rect><rect x="42.7" y="29.8" transform="matrix(-0.7072 -0.707 0.707 -0.7072 54.8735 83.7577)" width="4.2" height="1.5"></rect><rect x="14.7" y="37.1" transform="matrix(0.7071 0.7071 -0.7071 0.7071 31.7025 -0.8228)" width="4.2" height="1.5"></rect><rect x="25" y="47.4" transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 12.2855 101.3977)" width="4.2" height="1.5"></rect><rect x="19.9" y="42.3" transform="matrix(0.7071 0.7071 -0.7071 0.7071 36.8513 -2.9555)" width="4.2" height="1.5"></rect><rect x="11.7" y="40.2" transform="matrix(0.7071 0.7071 -0.7071 0.7071 32.9629 2.2207)" width="4.2" height="1.5"></rect><rect x="22" y="50.5" transform="matrix(-0.707 -0.7072 0.7072 -0.707 4.9277 104.4377)" width="4.2" height="1.5"></rect><rect x="16.8" y="45.3" transform="matrix(0.7071 0.7071 -0.7071 0.7071 38.1117 8.766792e-002)" width="4.2" height="1.5"></rect><rect x="8.6" y="43.2" transform="matrix(0.7071 0.7071 -0.7071 0.7071 34.2235 5.2638)" width="4.2" height="1.5"></rect><rect x="18.9" y="53.5" transform="matrix(-0.7072 -0.707 0.707 -0.7072 -2.4064 107.4868)" width="4.2" height="1.5"></rect><rect x="13.8" y="48.3" transform="matrix(-0.707 -0.7072 0.7072 -0.707 -7.5673 95.0498)" width="4.2" height="1.5"></rect><rect x="10.8" y="51.4" transform="matrix(-0.7072 -0.707 0.707 -0.7072 -14.9034 98.0997)" width="4.2" height="1.5"></rect><path d="M35.4,38.8c-1.1,1.1-2.4,1.7-3.9,1.9l0.2,1.5c1.8-0.2,3.5-1,4.8-2.3c1.3-1.3,2.1-3,2.3-4.8l-1.5-0.2   C37.1,36.4,36.5,37.8,35.4,38.8z"></path><path d="M31.7,26.2l-0.2,1.5c1.5,0.2,2.8,0.8,3.9,1.9c1.1,1.1,1.7,2.4,1.9,3.9l1.5-0.2c-0.2-1.8-1-3.5-2.3-4.8   C35.2,27.2,33.5,26.4,31.7,26.2z"></path><path d="M26.2,29.6c1.1-1.1,2.4-1.7,3.9-1.9l-0.2-1.5c-1.8,0.2-3.5,1-4.8,2.3c-1.3,1.3-2.1,3-2.3,4.8l1.5,0.2   C24.5,32,25.1,30.6,26.2,29.6z"></path><path d="M24.3,34.9l-1.5,0.2c0.2,1.8,1,3.5,2.3,4.8c1.3,1.3,3,2.1,4.8,2.3l0.2-1.5c-1.5-0.2-2.9-0.8-3.9-1.9   C25.1,37.8,24.5,36.4,24.3,34.9z"></path><path d="M43.4,0v1.5c11.1,0,20.1,9,20.1,20.1H65C65,9.7,55.3,0,43.4,0z"></path><path d="M43.4,7.4v1.5c7,0,12.7,5.7,12.7,12.7h1.5C57.6,13.8,51.2,7.4,43.4,7.4z"></path><path d="M48.6,21.6h1.5c0-3.7-3-6.7-6.7-6.7v1.5C46.3,16.4,48.6,18.7,48.6,21.6z"></path></g></svg>
-              Jukebox
             </li>
             <li class="db-panel">
               <svg viewBox="-140 140 1024 768" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M384 960C171.969 960 0 902.625 0 832V704c0-11.125 5.562-21.688 13.562-32C56.375 727.125 205.25 768 384 768s327.625-40.875 370.438-96c8 10.312 13.562 20.875 13.562 32v128c0 70.625-172 128-384 128zm0-256C171.969 704 0 646.625 0 576V448c0-6.781 2.562-13.375 6-19.906C7.938 424 10.5 419.969 13.562 416 56.375 471.094 205.25 512 384 512s327.625-40.906 370.438-96c3.062 3.969 5.625 8 7.562 12.094 3.438 6.531 6 13.125 6 19.906v128c0 70.625-172 128-384 128zm0-256C171.969 448 0 390.656 0 320v-64-64C0 121.344 171.969 64 384 64c212 0 384 57.344 384 128v128c0 70.656-172 128-384 128zm0-320c-141.375 0-256 28.594-256 64s114.625 64 256 64 256-28.594 256-64-114.625-64-256-64z"/></svg>
@@ -489,15 +440,10 @@
               <svg class="shuffle-button center" v-bind:class="{ 'aux-button-active': playerStats.shuffle }" xmlns="http://www.w3.org/2000/svg" version="1" viewBox="0 0 24 24" enable-background="new 0 0 24 24" width="25" height="25">
                 <path d="M 17 2 L 17 5 L 14.1875 5 C 13.0875 5 12 5.5875 11.5 6.6875 L 6.59375 16.5 C 6.49375 16.8 6.1125 17 5.8125 17 L 2 17 L 2 19 L 5.8125 19 C 6.9125 19 8 18.4125 8.5 17.3125 L 13.40625 7.5 C 13.50625 7.2 13.8875 7 14.1875 7 L 17 7 L 17 10 L 22 6 L 17 2 z M 2 5 L 2 7 L 5.8125 7 C 6.1125 7 6.4875 7.19375 6.6875 7.59375 L 8.40625 10.90625 L 9.5 8.6875 L 8.5 6.6875 C 7.9 5.5875 6.9125 5 5.8125 5 L 2 5 z M 11.59375 13.09375 L 10.5 15.3125 L 11.5 17.3125 C 12 18.3125 12.9875 19 14.1875 19 L 17 19 L 17 22 L 22 18 L 17 14 L 17 17 L 14.1875 17 C 13.8875 17 13.5125 16.80625 13.3125 16.40625 L 11.59375 13.09375 z"/>
               </svg>
-            </div>
+            <!--</div>
             <div v-on:click="toggleAutoDJ" class="next-button" title="Auto DJ">
               <svg v-bind:class="{ 'aux-button-active': playerStats.autoDJ }" class="center" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" style="width:25px;webkit-logical-width:25px;webkit-logical-height:25px;user-select:none;transform-origin:12.5px 12.5px;r:0;perspective-origin:12.5px 12.5px;overflow-y:hidden;overflow-x:hidden;inline-size:25px;height:25px;d:none;block-size:25px;background:0% 0%/auto padding-box border-box" overflow="hidden" display="block" fill="#fff"><g transform="translate(-.938 19.85)" style="y:0;user-select:none;transform:matrix(1,0,0,1,-.9375,19.85);perspective-origin:0 0"><g class="ld" style="y:0;x:0;user-select:none;transform-origin:7.9375px 0;transform:none;r:0;perspective-origin:0 0;line-height:31.4286px;font:400 22px/31.4286px 'Varela Round','century gothic',verdana;d:none"><text style="y:0;user-select:none;r:0;perspective-origin:7.9375px 0;line-height:31.4286px;font:400 22px/31.4286px Arial" white-space="nowrap" display="block">D</text></g></g><g transform="translate(14.938 19.85)" style="y:0;user-select:none;transform:matrix(1,0,0,1,14.9375,19.85);perspective-origin:0 0"><g class="ld" style="y:0;x:0;user-select:none;transform-origin:5.5px 0;transform:none;r:0;perspective-origin:0 0;line-height:31.4286px;font:400 22px/31.4286px 'Varela Round','century gothic',verdana;d:none"><text style="y:0;user-select:none;r:0;perspective-origin:5.5px 0;line-height:31.4286px;font:400 22px/31.4286px Arial" white-space="nowrap" display="block">J</text></g></g></svg>
-            </div>
-            <!-- <div class="player-button  remote-button" title="Remote Play">
-              <svg v-bind:class="{ 'aux-button-active': jukebox.live }" width="24" height="24" viewBox="0 0 24 24">
-                <path d="M12,0C8.96,0 6.21,1.23 4.22,3.22L5.63,4.63C7.26,3 9.5,2 12,2C14.5,2 16.74,3 18.36,4.64L19.77,3.23C17.79,1.23 15.04,0 12,0M7.05,6.05L8.46,7.46C9.37,6.56 10.62,6 12,6C13.38,6 14.63,6.56 15.54,7.46L16.95,6.05C15.68,4.78 13.93,4 12,4C10.07,4 8.32,4.78 7.05,6.05M12,15A2,2 0 0,1 10,13A2,2 0 0,1 12,11A2,2 0 0,1 14,13A2,2 0 0,1 12,15M15,9H9A1,1 0 0,0 8,10V22A1,1 0 0,0 9,23H15A1,1 0 0,0 16,22V10A1,1 0 0,0 15,9Z"/>
-              </svg>
-            </div> -->
+            </div>-->
           </div>
         </div>
 

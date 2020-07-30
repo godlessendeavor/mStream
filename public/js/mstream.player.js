@@ -873,26 +873,26 @@ var MSTREAMPLAYER = (function () {
   }
 
   // AutoDJ
-  mstreamModule.playerStats.autoDJ = false;
-  var autoDjIgnoreArray = [];
-  mstreamModule.ignoreVPaths = {};
-  mstreamModule.minRating = 0;
+  // mstreamModule.playerStats.autoDJ = false;
+  // var autoDjIgnoreArray = [];
+  // mstreamModule.ignoreVPaths = {};
+  // mstreamModule.minRating = 0;
 
-  mstreamModule.toggleAutoDJ = function () {
-    mstreamModule.playerStats.autoDJ = !mstreamModule.playerStats.autoDJ;
-    if (mstreamModule.playerStats.autoDJ === true) {
-      // Turn off shuffle & loop
-      mstreamModule.playerStats.shuffle = false;
-      mstreamModule.playerStats.shouldLoop = false;
+  // mstreamModule.toggleAutoDJ = function () {
+  //   mstreamModule.playerStats.autoDJ = !mstreamModule.playerStats.autoDJ;
+  //   if (mstreamModule.playerStats.autoDJ === true) {
+  //     // Turn off shuffle & loop
+  //     mstreamModule.playerStats.shuffle = false;
+  //     mstreamModule.playerStats.shouldLoop = false;
 
-      // Add song if necessary
-      if (mstreamModule.playlist.length === 0 || mstreamModule.positionCache.val === mstreamModule.playlist.length - 1) {
-        autoDJ();
-      }
-    }
+  //     // Add song if necessary
+  //     if (mstreamModule.playlist.length === 0 || mstreamModule.positionCache.val === mstreamModule.playlist.length - 1) {
+  //       autoDJ();
+  //     }
+  //   }
 
-    return mstreamModule.playerStats.autoDJ;
-  }
+  //   return mstreamModule.playerStats.autoDJ;
+  // }
 
   // Return an object that is assigned to Module
   return mstreamModule;

@@ -1,12 +1,5 @@
 var VUEBROWSER = (function () {
   let mstreamModule = {};
-
-  new Vue({
-    el: '#responsive-left-nav',
-    data: {
-      jukebox: JUKEBOX.stats
-    }
-  });
   
   new Vue({
     el: '#top-nav-bar',

@@ -198,11 +198,6 @@ var VUEPLAYER = (function () {
   });
 
 
-  var jukeStats = false
-  if (typeof JUKEBOX !== 'undefined') {
-    jukeStats = JUKEBOX.stats
-  }
-
   new Vue({
     el: '#mstream-player',
     data: {
@@ -210,7 +205,7 @@ var VUEPLAYER = (function () {
       playlist: MSTREAMPLAYER.playlist,
       positionCache: MSTREAMPLAYER.positionCache,
       met: MSTREAMPLAYER.playerStats.metadata,
-      jukebox: jukeStats,
+      //jukebox: jukeStats,
       curVol: 100, // Manage our own volume
       lastVol: 100,
       isViz: false
@@ -292,9 +287,6 @@ var VUEPLAYER = (function () {
       },
       toggleShuffle: function () {
         MSTREAMPLAYER.toggleShuffle();
-      },
-      toggleAutoDJ: function () {
-        MSTREAMPLAYER.toggleAutoDJ();
       },
       fadeOverlay: function () {
         if ($('#main-overlay').is(':visible')) {
@@ -424,6 +416,7 @@ var VUEPLAYER = (function () {
     hoverColor: '#26477b',
     activeColor: '#6684b2',
     ratedColor: '#6684b2',
+    totalStars: 10,
     callback: function (currentRating, $el) {
       MSTREAMPLAYER.editSongMetadata('rating', parseInt(currentRating * 2), currentPopperSongIndex2);
 
