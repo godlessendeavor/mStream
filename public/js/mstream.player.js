@@ -81,13 +81,13 @@ var MSTREAMPLAYER = (function () {
     });
   }
 
-  function autoDJ() {
+  function randomPlay() {
     // Call mStream API for random song
     mstreamModule.getRandomSong(function (res, err) {
       if (err) {
-        mstreamModule.playerStats.autoDJ = false;
+        mstreamModule.playerStats.randomPlay = false;
         iziToast.warning({
-          title: 'Auto DJ Failed',
+          title: 'Random Play Failed',
           message: err.responseJSON.error ? err.responseJSON.error  : '',
           position: 'topCenter',
           timeout: 3500
@@ -150,8 +150,8 @@ var MSTREAMPLAYER = (function () {
       while (shuffleCache.length > 0) { shuffleCache.pop(); }
     }
 
-    if (mstreamModule.playerStats.autoDJ === true) {
-      autoDJ();
+    if (mstreamModule.playerStats.randomPlay === true) {
+      randomPlay();
     }
 
     return true;
@@ -237,8 +237,8 @@ var MSTREAMPLAYER = (function () {
       // Lower position cache by 1 if necessary
       mstreamModule.positionCache.val--;
     } else if (position === (mstreamModule.positionCache.val + 1)) {
-      if(mstreamModule.positionCache.val === (mstreamModule.playlist.length - 1) && mstreamModule.playerStats.autoDJ === true) {
-          autoDJ();
+      if(mstreamModule.positionCache.val === (mstreamModule.playlist.length - 1) && mstreamModule.playerStats.randomPlay === true) {
+          randomPlay();
       }
 
       // If the next song is removed, reset cache
@@ -407,10 +407,9 @@ var MSTREAMPLAYER = (function () {
       return false;
     }
 
-    if (mstreamModule.playerStats.autoDJ === true && position === mstreamModule.playlist.length - 1) {
-      autoDJ();
+    if (mstreamModule.playerStats.randomPlay === true && position === mstreamModule.playlist.length - 1) {
+      randomPlay();
     }
-
 
     var localPlayerObject = getCurrentPlayer();
     var otherPlayerObject = getOtherPlayer();
@@ -789,7 +788,7 @@ var MSTREAMPLAYER = (function () {
     if (typeof (newValue) != "boolean") {
       return false;
     }
-    if (mstreamModule.playerStats.autoDJ === true) {
+    if (mstreamModule.playerStats.randomPlay === true) {
       mstreamModule.playerStats.shouldLoop = false;
       return false;
     }
@@ -797,7 +796,7 @@ var MSTREAMPLAYER = (function () {
     return newValue;
   }
   mstreamModule.toggleRepeat = function () {
-    if (mstreamModule.playerStats.autoDJ === true) {
+    if (mstreamModule.playerStats.randomPlay === true) {
       mstreamModule.playerStats.shouldLoop = false;
       return false;
     }
@@ -813,7 +812,7 @@ var MSTREAMPLAYER = (function () {
     if (typeof (newValue) != "boolean") {
       return false;
     }
-    if (mstreamModule.playerStats.autoDJ === true) {
+    if (mstreamModule.playerStats.randomPlay === true) {
       mstreamModule.playerStats.shuffle = false;
       return false;
     }
@@ -829,7 +828,7 @@ var MSTREAMPLAYER = (function () {
   }
   
   mstreamModule.toggleShuffle = function () {
-    if (mstreamModule.playerStats.autoDJ === true) {
+    if (mstreamModule.playerStats.randomPlay === true) {
       mstreamModule.playerStats.shuffle = false;
       return false;
     }
@@ -872,27 +871,27 @@ var MSTREAMPLAYER = (function () {
     return array;
   }
 
-  // AutoDJ
-  // mstreamModule.playerStats.autoDJ = false;
-  // var autoDjIgnoreArray = [];
-  // mstreamModule.ignoreVPaths = {};
-  // mstreamModule.minRating = 0;
+  // RandomPlay
+  mstreamModule.playerStats.randomPlay = false;
+  var autoDjIgnoreArray = [];
+  mstreamModule.ignoreVPaths = {};
+  mstreamModule.minRating = 0;
 
-  // mstreamModule.toggleAutoDJ = function () {
-  //   mstreamModule.playerStats.autoDJ = !mstreamModule.playerStats.autoDJ;
-  //   if (mstreamModule.playerStats.autoDJ === true) {
-  //     // Turn off shuffle & loop
-  //     mstreamModule.playerStats.shuffle = false;
-  //     mstreamModule.playerStats.shouldLoop = false;
+  mstreamModule.toggleRandomPlay = function () {
+    mstreamModule.playerStats.randomPlay = !mstreamModule.playerStats.randomPlay;
+    if (mstreamModule.playerStats.randomPlay === true) {
+      // Turn off shuffle & loop
+      mstreamModule.playerStats.shuffle = false;
+      mstreamModule.playerStats.shouldLoop = false;
 
-  //     // Add song if necessary
-  //     if (mstreamModule.playlist.length === 0 || mstreamModule.positionCache.val === mstreamModule.playlist.length - 1) {
-  //       autoDJ();
-  //     }
-  //   }
+      // Add song if necessary
+      if (mstreamModule.playlist.length === 0 || mstreamModule.positionCache.val === mstreamModule.playlist.length - 1) {
+        randomPlay();
+      }
+    }
 
-  //   return mstreamModule.playerStats.autoDJ;
-  // }
+    return mstreamModule.playerStats.randomPlay;
+  }
 
   // Return an object that is assigned to Module
   return mstreamModule;

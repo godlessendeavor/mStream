@@ -822,11 +822,11 @@ ul.left-nav-menu li.selected svg {
   max-height: 300px;
 }
 
-input[name="autodj-folders"] {
+input[name="randomPlay-folders"] {
   cursor: pointer;
 }
 
-#autodj-ratings{
+#randomPlay-ratings{
   cursor: pointer;
   margin-left: 10px;
   max-width: calc(100% - 20px);

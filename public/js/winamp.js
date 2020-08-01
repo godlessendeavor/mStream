@@ -924,7 +924,7 @@ $(document).ready(function () {
       //parse through the json array and make an array of corresponding divs
       var files = [];
       $.each(response, function (index, value) {
-        var rating = (value.metadata.rating / 2);
+        var rating = (value.metadata.rating);
         if (!Number.isInteger(rating)) {
           rating = rating.toFixed(1);
         }

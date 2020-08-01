@@ -30,10 +30,8 @@ console.log(colors.bold(`
   | '_ \` _ \\\\___ \\| __| '__/ _ \\/ _\` | '_ \` _ \\
   | | | | | |___) | |_| | |  __/ (_| | | | | | |
   |_| |_| |_|____/ \\__|_|  \\___|\\__,_|_| |_| |_|`));
-console.log(colors.bold(`  Paul Sori - ${colors.underline('paul@mstream.io')}`));
 console.log();
-console.log(colors.magenta.bold('Find a bug? Report it at:'));
-console.log(colors.underline('https://github.com/IrosTheBeggar/mStream/issues'));
+console.log(colors.underline('https://github.com/godlessendeavor/mStream'));
 console.log();
 
 // Boot the server

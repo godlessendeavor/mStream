@@ -105,7 +105,7 @@ var VUEPLAYER = (function () {
 
         currentPopperSong = this.song;
 
-        $('.my-rating').starRating('setRating', this.song.metadata.rating / 2)
+        $('.my-rating').starRating('setRating', this.song.metadata.rating)
 
         const pop = document.getElementById('pop');
         new Popper(ref, pop, {
@@ -171,7 +171,7 @@ var VUEPLAYER = (function () {
         if (!this.song.metadata.rating) {
           return '';
         }
-        var returnThis = this.song.metadata.rating / 2;
+        var returnThis = this.song.metadata.rating;
         if (!Number.isInteger(returnThis)) {
           returnThis = returnThis.toFixed(1);
         }
@@ -205,7 +205,6 @@ var VUEPLAYER = (function () {
       playlist: MSTREAMPLAYER.playlist,
       positionCache: MSTREAMPLAYER.positionCache,
       met: MSTREAMPLAYER.playerStats.metadata,
-      //jukebox: jukeStats,
       curVol: 100, // Manage our own volume
       lastVol: 100,
       isViz: false
@@ -287,6 +286,9 @@ var VUEPLAYER = (function () {
       },
       toggleShuffle: function () {
         MSTREAMPLAYER.toggleShuffle();
+      },
+      toggleRandomPlay: function () {
+        MSTREAMPLAYER.toggleRandomPlay();
       },
       fadeOverlay: function () {
         if ($('#main-overlay').is(':visible')) {
@@ -418,10 +420,10 @@ var VUEPLAYER = (function () {
     ratedColor: '#6684b2',
     totalStars: 10,
     callback: function (currentRating, $el) {
-      MSTREAMPLAYER.editSongMetadata('rating', parseInt(currentRating * 2), currentPopperSongIndex2);
+      MSTREAMPLAYER.editSongMetadata('rating', parseInt(currentRating), currentPopperSongIndex2);
 
       // make a server call here
-      MSTREAMAPI.rateSong(currentPopperSong.filepath, parseInt(currentRating * 2), function (res, err) {
+      MSTREAMAPI.rateSong(currentPopperSong.filepath, parseInt(currentRating), function (res, err) {
         if(err) {
           iziToast.error({
             title: 'Failed to set rating',
