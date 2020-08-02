@@ -121,6 +121,10 @@ var MSTREAMAPI = (function () {
     makeGETRequest("/db/get-rated", false, callback);
   }
 
+  mstreamModule.clearRated = function (callback) {
+    makePOSTRequest("/db/clear-rated", false, callback);
+  }
+
   mstreamModule.getRecentlyAdded = function (limit, callback) {
     makePOSTRequest("/db/recent/added", { limit: limit }, callback);
   }

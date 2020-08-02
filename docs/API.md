@@ -68,9 +68,6 @@ http://yourserver.com/media/[your vPath]/path/to/song.mp3?token=XXXXXXXX
 
 [/db/recursive-scan](API/db_recursive-scan.md)
 
-## JukeBox
-
-[/jukebox/push-to-client](API/jukebox_push-to-client.md)
 
 ## Download
 

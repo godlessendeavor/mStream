@@ -496,6 +496,26 @@ exports.setup = function (mstream, program) {
     });
   });
 
+  mstream.post('/db/clear-rated', (req, res) => {
+
+    if (!userMetadataCollection) {
+      res.status(500).json({ error: 'No DB' });
+      return;
+    }
+
+    const result = userMetadataCollection.clear();
+
+    res.json({});
+
+    userDataDb.saveDatabase(err => {
+      if (err) {
+        winston.error(`DB Save Error : ${err}`);
+      }
+    });
+  });
+
+
+
   mstream.post('/db/random-songs', (req, res) => {
     if (!fileCollection) {
       res.status(500).json({ error: 'No files in DB' });
