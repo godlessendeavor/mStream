@@ -456,9 +456,13 @@ exports.setup = function (mstream, program) {
     res.json(songs);
   });
 
+  function escapeRegex(string) {
+    return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+  }
+
   mstream.post('/db/rate-song', (req, res) => {
-    if (!req.body.filepath || !req.body.rating || !Number.isInteger(req.body.rating) || req.body.rating < 0 || req.body.rating > 10) {
-      return res.status(500).json({ error: 'Bad input data' });
+    if (!req.body.filepath || !req.body.rating || req.body.rating < 0 || req.body.rating > 10) {
+      return res.status(500).json({ error: `Bad input data ${req.body.filepath} ${req.body.rating}`});
     }
 
     const pathInfo = program.getVPathInfo(req.body.filepath);
@@ -469,9 +473,9 @@ exports.setup = function (mstream, program) {
       return;
     }
 
-    const result = fileCollection.findOne({ '$and':[{ 'filepath': pathInfo.relativePath}, { 'vpath': pathInfo.vpath }] });
+    const result = fileCollection.find({ '$and':[{ 'filepath': {'$regex': [escapeRegex(pathInfo.relativePath), 'i']}}, { 'vpath': pathInfo.vpath }] });
     if (!result) {
-      res.status(500).json({ error: 'File not found in DB' });
+      res.status(500).json({ error: `File not found in DB with relpath ${pathInfo.relativePath} and vpath ${pathInfo.vpath}`});
       return;
     }
 
