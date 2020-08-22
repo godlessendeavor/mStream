@@ -518,7 +518,14 @@ exports.setup = function (mstream, program) {
     });
   });
 
+  mstream.get('/db/amount-random-songs', (req, res) => {
 
+    const amountOfRated = userMetadataCollection.chain().simplesort('filepath').data();
+
+    const returnThis = { amountOfRated: amountOfRated.length};
+
+    res.json(returnThis);
+  });
 
   mstream.post('/db/random-songs', (req, res) => {
     if (!fileCollection) {
@@ -562,6 +569,7 @@ exports.setup = function (mstream, program) {
 
     const results = fileCollection.chain().eqJoin(userMetadataCollection.chain(), leftFun, rightFunDefault, mapFunDefault).find(orClause).data();
 
+  
     const count = results.length;
     if (count === 0) {
       res.status(444).json({ error: 'No songs that match criteria' });
@@ -587,7 +595,7 @@ exports.setup = function (mstream, program) {
         "artist": randomSong.artist ? randomSong.artist : null,
         "hash": randomSong.hash ? randomSong.hash : null,
         "album": randomSong.album ? randomSong.album : null,
-        "track": randomSong.track ? randomSong.track : null,
+        "track": randomSong.track ? randomSong.track : randomSong.filepath,
         "title": randomSong.title ? randomSong.title : null,
         "year": randomSong.year ? randomSong.year : null,
         "album-art": randomSong.aaFile ? randomSong.aaFile : null,
