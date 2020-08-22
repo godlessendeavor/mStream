@@ -518,7 +518,7 @@ exports.setup = function (mstream, program) {
     });
   });
 
-  mstream.get('/db/amount-random-songs', (req, res) => {
+  mstream.get('/db/amount-rated-songs', (req, res) => {
 
     const amountOfRated = userMetadataCollection.chain().simplesort('filepath').data();
 
@@ -526,6 +526,35 @@ exports.setup = function (mstream, program) {
 
     res.json(returnThis);
   });
+
+  mstream.get('/db/rated-song', (req, res) => {
+
+    const pathInfo = program.getVPathInfo(req.body.filepath);
+    if (!pathInfo) { return res.status(500).json({ error: 'Could not find file' }); }
+
+    if (!userMetadataCollection || !fileCollection) {
+      res.status(500).json({ error: 'No DB' });
+      return;
+    }
+
+    const result = fileCollection.find({ '$and':[{ 'filepath': {'$regex': [escapeRegex(pathInfo.relativePath), 'i']}}, { 'vpath': pathInfo.vpath }] });
+    if (!result) {
+      res.status(500).json({ error: `File not found in DB with relpath ${pathInfo.relativePath} and vpath ${pathInfo.vpath}`});
+      return;
+    }
+
+    const result2 = userMetadataCollection.findOne({ '$and':[{ 'hash': result.hash}, { 'user': req.user.username }] });
+
+    if (!result2) {
+      res.status(500).json({ error: `File with relpath ${pathInfo.relativePath} and vpath ${pathInfo.vpath} is not rated yet`});
+      return;
+    }
+    const returnThis = { song: result.filepath};
+
+    res.json(returnThis);
+  });
+
+
 
   mstream.post('/db/random-songs', (req, res) => {
     if (!fileCollection) {
