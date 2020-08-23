@@ -583,12 +583,14 @@ exports.setup = function (mstream, program) {
       orClause['$or'].push({ 'vpath': { '$eq': vpath } });
     }
 
-    let minRating = Number(req.body.minRating);
     // Add Rating clause
-    if (minRating && typeof minRating === 'number' && minRating <= 10 && !minRating < 1) {
+    let minRating = Number(req.body.minRating);
+    let maxRating = Number(req.body.maxRating);
+    if (minRating && typeof minRating === 'number' && minRating <= 10 && !minRating < 1 && maxRating && typeof maxRating === 'number' && maxRating <= 10) {
       orClause = {'$and': [
         orClause,
-        { 'rating': { '$gte': req.body.minRating } }
+        { 'rating': { '$gte': req.body.minRating }},
+        { 'rating': { '$lte': req.body.maxRating }}
       ]};
     }
 

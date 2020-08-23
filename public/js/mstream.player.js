@@ -66,6 +66,7 @@ var MSTREAMPLAYER = (function () {
     const params = {
       ignoreList: randomFavoriesIgnoreArray,
       minRating: mstreamModule.minRating,
+      maxRating: mstreamModule.maxRating,
       ignoreVPaths: mstreamModule.ignoreVPaths
     };
 
@@ -876,6 +877,7 @@ var MSTREAMPLAYER = (function () {
   var randomFavoriesIgnoreArray = [];
   mstreamModule.ignoreVPaths = {};
   mstreamModule.minRating = 0;
+  mstreamModule.maxRating = 0;
 
   mstreamModule.toggleRandomPlay = function () {
     mstreamModule.playerStats.randomPlay = !mstreamModule.playerStats.randomPlay;

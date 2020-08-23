@@ -826,7 +826,13 @@ input[name="randomPlay-folders"] {
   cursor: pointer;
 }
 
-#randomPlay-ratings{
+#randomPlay-min-ratings{
+  cursor: pointer;
+  margin-left: 10px;
+  max-width: calc(100% - 20px);
+}
+
+#randomPlay-max-ratings{
   cursor: pointer;
   margin-left: 10px;
   max-width: calc(100% - 20px);

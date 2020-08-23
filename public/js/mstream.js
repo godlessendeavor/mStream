@@ -1472,11 +1472,18 @@ $(document).ready(function () {
       newHtml += '<input ' + checkedString + ' id="randomPlay-folder-'+ MSTREAMAPI.currentServer.vpaths[i] +'" type="checkbox" value="'+MSTREAMAPI.currentServer.vpaths[i]+'" name="randomPlay-folders"><label for="randomPlay-folder-'+ MSTREAMAPI.currentServer.vpaths[i] +'">' + MSTREAMAPI.currentServer.vpaths[i] + '</label><br>';
     }
 
-    newHtml += '</p><h3>Minimum Rating</h3>  <select id="randomPlay-ratings">';
+    newHtml += '</p><h3>Minimum Rating</h3>  <select id="randomPlay-min-ratings">';
     for (var i = 0; i < 11; i++) {
-      var selectedString = (Number(MSTREAMPLAYER.minRating) === i) ? 'selected' : '';
-      var optionString = (i ===0) ? 'Disabled' : +(i).toFixed(1) ;
-      newHtml += '<option '+selectedString+' value="'+i+'">'+ optionString + '</option>'; 
+      var selectedMinRating = (Number(MSTREAMPLAYER.minRating) === i) ? 'selected' : '';
+      var optionMinString = (i ===0) ? 'Disabled' : +(i).toFixed(1) ;
+      newHtml += '<option '+selectedMinRating+' value="'+i+'">'+ optionMinString + '</option>'; 
+    }
+    newHtml += '</select>';
+    newHtml += '</p><h3>Maximum Rating</h3>  <select id="randomPlay-max-ratings">';
+    for (var i = 0; i < 11; i++) {
+      var selectedMaxRating = (Number(MSTREAMPLAYER.maxRating) === i) ? 'selected' : '';
+      var optionMaxString = (i ===0) ? 'Disabled' : +(i).toFixed(1) ;
+      newHtml += '<option '+selectedMaxRating+' value="'+i+'">'+ optionMaxString + '</option>'; 
     }
     newHtml += '</select>';
     
@@ -1502,8 +1509,12 @@ $(document).ready(function () {
     }
   });
 
-  $('#filelist').on('change', '#randomPlay-ratings', function(){
+  $('#filelist').on('change', '#randomPlay-min-ratings', function(){
     MSTREAMPLAYER.minRating = $(this).val();
+  });
+
+  $('#filelist').on('change', '#randomPlay-max-ratings', function(){
+    MSTREAMPLAYER.maxRating = $(this).val();
   });
 
   //////////////////////// Transcode
