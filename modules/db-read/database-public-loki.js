@@ -549,7 +549,7 @@ exports.setup = function (mstream, program) {
       res.status(500).json({ error: `File with relpath ${pathInfo.relativePath} and vpath ${pathInfo.vpath} is not rated yet`});
       return;
     }
-    const returnThis = { song: pathInfo.relativePath};
+    const returnThis = { song: pathInfo.relativePath, rating: result2.rating};
 
     res.json(returnThis);
   });

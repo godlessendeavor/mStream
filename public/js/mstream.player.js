@@ -64,7 +64,7 @@ var MSTREAMPLAYER = (function () {
 
   mstreamModule.getRandomSong = function (callback) {
     const params = {
-      ignoreList: autoDjIgnoreArray,
+      ignoreList: randomFavoriesIgnoreArray,
       minRating: mstreamModule.minRating,
       ignoreVPaths: mstreamModule.ignoreVPaths
     };
@@ -76,7 +76,7 @@ var MSTREAMPLAYER = (function () {
       }
       // Get first song from array
       const firstSong = res.songs[0];
-      autoDjIgnoreArray = res.ignoreList;
+      randomFavoriesIgnoreArray = res.ignoreList;
       callback(firstSong, null);
     });
   }
@@ -873,7 +873,7 @@ var MSTREAMPLAYER = (function () {
 
   // RandomPlay
   mstreamModule.playerStats.randomPlay = false;
-  var autoDjIgnoreArray = [];
+  var randomFavoriesIgnoreArray = [];
   mstreamModule.ignoreVPaths = {};
   mstreamModule.minRating = 0;
 
