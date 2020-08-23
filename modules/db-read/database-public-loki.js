@@ -520,9 +520,21 @@ exports.setup = function (mstream, program) {
 
   mstream.get('/db/amount-rated-songs', (req, res) => {
 
-    const amountOfRated = userMetadataCollection.chain().simplesort('filepath').data();
+    const amountOfRated = userMetadataCollection.find();
 
     const returnThis = { amountOfRated: amountOfRated.length};
+
+    res.json(returnThis);
+  });
+
+  mstream.get('/db/all-rated-songs', (req, res) => {
+
+    var left = userMetadataCollection.chain().simplesort('hash');
+    var right = fileCollection.chain();
+    const results = left.eqJoin(right, 'hash', 'hash').data();
+
+
+    const returnThis = { rated: results};
 
     res.json(returnThis);
   });
@@ -600,7 +612,6 @@ exports.setup = function (mstream, program) {
 
     const results = fileCollection.chain().eqJoin(userMetadataCollection.chain(), leftFun, rightFunDefault, mapFunDefault).find(orClause).data();
 
-  
     const count = results.length;
     if (count === 0) {
       res.status(444).json({ error: 'No songs that match criteria' });
