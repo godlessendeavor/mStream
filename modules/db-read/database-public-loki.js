@@ -2,6 +2,7 @@ const fe = require('path');
 const loki = require('lokijs');
 const winston = require('winston');
 const sync = require('../sync');
+const util = require('util');
 
 const userDataDbName = 'user-data.loki-v1.db'
 
@@ -473,29 +474,37 @@ exports.setup = function (mstream, program) {
       return;
     }
 
-    const result = fileCollection.find({ '$and':[{ 'filepath': {'$regex': [escapeRegex(pathInfo.relativePath), 'i']}}, { 'vpath': pathInfo.vpath }] });
-    if (!result) {
+    const result = fileCollection.chain().find({ '$and':[{ 'filepath': {'$regex': [escapeRegex(pathInfo.relativePath), 'i']}}, { 'vpath': pathInfo.vpath }] }).limit(1).data();
+    if (result.length < 1 || result[0].hash === undefined) {
       res.status(500).json({ error: `File not found in DB with relpath ${pathInfo.relativePath} and vpath ${pathInfo.vpath}`});
+      winston.error(`File ${req.body.filepath} does not have a hash ${result.hash}`);
+      winston.info(util.inspect(result[0], false, null, true /* enable colors */));
       return;
     }
 
-    const result2 = userMetadataCollection.findOne({ '$and':[{ 'hash': result.hash}, { 'user': req.user.username }] });
-    if (!result2) {
+    var typeSave = '';
+    const result2 = userMetadataCollection.chain().find({ '$and':[{ 'hash': result[0].hash}, { 'user': req.user.username }] }).limit(1).data();
+    if (result2.length < 1) {
+      winston.info(`Inserting object with hash ${result[0].hash}`);
       userMetadataCollection.insert({
         user: req.user.username,
         hash: result.hash,
         rating: req.body.rating
       });
     } else {
+      winston.info(`Updating object`);
+      winston.info(util.inspect(result2, false, null, true /* enable colors */));
       result2.rating = req.body.rating;
       userMetadataCollection.update(result2);
     }
 
-    res.json({});
-
     userDataDb.saveDatabase(err => {
       if (err) {
         winston.error(`DB Save Error : ${err}`);
+        res.status(500).json({error: err});
+      }
+      else { 
+        res.json({savedSong: result[0].hash});
       }
     });
   });
