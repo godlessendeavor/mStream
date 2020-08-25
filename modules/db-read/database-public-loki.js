@@ -482,7 +482,6 @@ exports.setup = function (mstream, program) {
       return;
     }
 
-    var typeSave = '';
     const result2 = userMetadataCollection.chain().find({ '$and':[{ 'hash': result[0].hash}, { 'user': req.user.username }] }).limit(1).data();
     if (result2.length < 1) {
       winston.info(`Inserting object with hash ${result[0].hash}`);
@@ -541,7 +540,6 @@ exports.setup = function (mstream, program) {
     var left = userMetadataCollection.chain().simplesort('hash');
     var right = fileCollection.chain();
     const results = left.eqJoin(right, 'hash', 'hash').data();
-
 
     const returnThis = { rated: results};
 
