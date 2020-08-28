@@ -482,19 +482,22 @@ exports.setup = function (mstream, program) {
       return;
     }
 
+    var typeSave = '';
     const result2 = userMetadataCollection.chain().find({ '$and':[{ 'hash': result[0].hash}, { 'user': req.user.username }] }).limit(1).data();
     if (result2.length < 1) {
       winston.info(`Inserting object with hash ${result[0].hash}`);
+      typeSave = 'insert';
       userMetadataCollection.insert({
         user: req.user.username,
-        hash: result.hash,
+        hash: result[0].hash,
         rating: req.body.rating
       });
     } else {
-      winston.info(`Updating object`);
-      winston.info(util.inspect(result2, false, null, true /* enable colors */));
-      result2.rating = req.body.rating;
-      userMetadataCollection.update(result2);
+      typeSave = 'update';
+      winston.info(`Updating object for ${req.body.filepath}`);
+      winston.info(util.inspect(result2[0], false, null, true /* enable colors */));
+      result2[0].rating = req.body.rating;
+      userMetadataCollection.update(result2[0]);
     }
 
     userDataDb.saveDatabase(err => {
@@ -503,7 +506,7 @@ exports.setup = function (mstream, program) {
         res.status(500).json({error: err});
       }
       else { 
-        res.json({savedSong: result[0].hash});
+        res.json({savedSong: result[0].hash, typeSave: typeSave});
       }
     });
   });
@@ -537,7 +540,7 @@ exports.setup = function (mstream, program) {
 
   mstream.get('/db/all-rated-songs', (req, res) => {
 
-    var left = userMetadataCollection.chain().simplesort('hash');
+    var left = userMetadataCollection.chain().find();
     var right = fileCollection.chain();
     const results = left.eqJoin(right, 'hash', 'hash').data();
 
