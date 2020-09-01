@@ -40,7 +40,7 @@ exports.serveIt = config => {
   }
 
   // Magic Middleware Things
-  mstream.use(bodyParser.json()); // support json encoded bodies
+  mstream.use(bodyParser.json({strict: false})); // support json encoded bodies
   mstream.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
   mstream.use((req, res, next) => { // CORS
     res.header("Access-Control-Allow-Origin", "*");

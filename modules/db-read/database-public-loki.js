@@ -477,7 +477,7 @@ exports.setup = function (mstream, program) {
     const result = fileCollection.chain().find({ '$and':[{ 'filepath': {'$regex': [escapeRegex(pathInfo.relativePath), 'i']}}, { 'vpath': pathInfo.vpath }] }).limit(1).data();
     if (result.length < 1 || result[0].hash === undefined) {
       res.status(500).json({ error: `File not found in DB with relpath ${pathInfo.relativePath} and vpath ${pathInfo.vpath}`});
-      winston.error(`File ${req.body.filepath} does not have a hash ${result.hash}`);
+      winston.error(`File ${req.body.filepath} does not have a hash`);
       winston.info(util.inspect(result[0], false, null, true /* enable colors */));
       return;
     }
