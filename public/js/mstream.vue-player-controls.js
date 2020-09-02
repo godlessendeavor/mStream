@@ -420,10 +420,10 @@ var VUEPLAYER = (function () {
     ratedColor: '#6684b2',
     totalStars: 10,
     callback: function (currentRating, $el) {
-      MSTREAMPLAYER.editSongMetadata('rating', parseInt(currentRating), currentPopperSongIndex2);
-
+      MSTREAMPLAYER.editSongMetadata('rating', parseFloat(currentRating), currentPopperSongIndex2);
+      // TODO: the rating doesn change!! Fix it
       // make a server call here
-      MSTREAMAPI.rateSong(currentPopperSong.filepath, parseInt(currentRating), function (res, err) {
+      MSTREAMAPI.rateSong(currentPopperSong.filepath, parseFloat(currentRating), function (res, err) {
         if(err) {
           iziToast.error({
             title: 'Failed to set rating',

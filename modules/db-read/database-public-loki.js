@@ -495,8 +495,8 @@ exports.setup = function (mstream, program) {
     } else {
       typeSave = 'update';
       winston.info(`Updating object for ${req.body.filepath}`);
-      winston.info(util.inspect(result2[0], false, null, true /* enable colors */));
       result2[0].rating = req.body.rating;
+      winston.info(util.inspect(result2[0], false, null, true /* enable colors */));
       userMetadataCollection.update(result2[0]);
     }
 
