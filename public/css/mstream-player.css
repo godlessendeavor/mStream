@@ -189,7 +189,7 @@
   background-color: #E6EBFA;
 }
 
-.removeSong, .deletePlaylist, .removePlaylistSong{
+.removeSong, .deletePlaylist, .removePlaylistSong, .deleteRatedSong{
   padding-top: 1px;
   cursor: pointer;
   min-width: 28px !important;
@@ -202,7 +202,7 @@
   opacity: 0.9;
 }
 
-.removeSong:hover, .deletePlaylist:hover, .removePlaylistSong:hover{
+.removeSong:hover, .deletePlaylist:hover, .removePlaylistSong:hover, .deleteRatedSong:hover{
   opacity: 1;
   background-color: 	rgba(255,0,0, .85);
 }

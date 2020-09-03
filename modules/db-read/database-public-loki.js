@@ -477,7 +477,6 @@ exports.setup = function (mstream, program) {
     const result = fileCollection.chain().find({ '$and':[{ 'filepath': {'$regex': [escapeRegex(pathInfo.relativePath), 'i']}}, { 'vpath': pathInfo.vpath }] }).limit(1).data();
     if (result.length < 1 || result[0].hash === undefined) {
       res.status(500).json({ error: `File not found in DB with relpath ${pathInfo.relativePath} and vpath ${pathInfo.vpath}`});
-      winston.error(`File ${req.body.filepath} does not have a hash`);
       winston.info(util.inspect(result[0], false, null, true /* enable colors */));
       return;
     }
@@ -509,6 +508,34 @@ exports.setup = function (mstream, program) {
         res.json({savedSong: result[0].hash, typeSave: typeSave});
       }
     });
+  });
+
+  mstream.post('/db/delete-rated', (req, res) => {
+    if (!req.body.filepath) {
+      return res.status(500).json({ error: `A filepath is needed in order to remove a song`});
+    };
+
+    const pathInfo = program.getVPathInfo(req.body.filepath);
+    if (!pathInfo) { return res.status(500).json({ error: 'Could not find file' }); }
+
+    const result = fileCollection.chain().find({ '$and':[{ 'filepath': {'$regex': [escapeRegex(pathInfo.relativePath), 'i']}}, { 'vpath': pathInfo.vpath }] }).limit(1).data();
+    if (result.length < 1 || result[0].hash === undefined){
+      res.status(500).json({error: `Could not find file ${req.body.filepath} in collection`});
+    }
+    else{
+      winston.info(`Removing rated song with hash ${result[0].hash}`);
+      userMetadataCollection.chain().find({'$hash': result[0].hash}).remove();
+      // TODO: why is this not working?
+   
+      userDataDb.saveDatabase(err => {
+        if (err) {
+          winston.error(`DB Save Error : ${err}`);
+          res.status(500).json({error: err});
+        }
+      });
+    }
+
+    res.json({});
   });
 
   mstream.post('/db/clear-rated', (req, res) => {

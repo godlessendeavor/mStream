@@ -172,12 +172,19 @@ var MSTREAMPLAYER = (function () {
     if (!mstreamModule.playlist[position]) {
       return false;
     }
-    console.log('Number of songs in playlist is %d', mstreamModule.playlist.length)
-
     clearEnd();
 
     mstreamModule.positionCache.val = position;
     return goToSong(mstreamModule.positionCache.val);
+  }
+
+  mstreamModule.deleteRatedSong = function (song) {
+    MSTREAMAPI.deleteRated(song.filepath, function (res, err) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+    });
   }
 
   mstreamModule.removeSongAtPosition = function (position, sanityCheckUrl) {

@@ -121,6 +121,10 @@ var MSTREAMAPI = (function () {
     makeGETRequest("/db/get-rated", false, callback);
   }
 
+  mstreamModule.deleteRated = function (filepath, callback) {
+    makePOSTRequest("/db/delete-rated",  { filepath: filepath} , callback);
+  }
+
   mstreamModule.clearRated = function (callback) {
     makePOSTRequest("/db/clear-rated", false, callback);
   }
