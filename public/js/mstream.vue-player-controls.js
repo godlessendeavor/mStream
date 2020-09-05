@@ -57,12 +57,12 @@ var VUEPLAYER = (function () {
       <div class="noselect playlist-item" v-bind:class="{ playing: (this.index === positionCache.val), playError: (this.songError && this.songError === true) }" >\
         <span class="drag-handle"><img src="/public/img/drag-handle.svg"></span><span v-on:click="goToSong($event)" class="song-area">{{ comtext }}</span>\
         <div class="song-button-box">\
-          <span v-on:click="removeSong($event)"      class="removeSong">X</span>\
           <span v-on:click="deleteRatedSong($event)" class="deleteRatedSong">-</span>\
-          <span v-on:click="createPopper($event)"    class="songDropdown pop-c">\
+          <span v-on:click="removeSong($event)" class="removeSong">X</span>\
+          <span v-on:click="createPopper($event)" class="songDropdown pop-c">\
             {{ratingNumber}}<img class="star-small pop-c" src="/public/img/star.svg">\
           </span>\
-          <span v-on:click="downloadSong($event)     class="downloadPlaylistSong" ">\
+          <span class="downloadPlaylistSong" v-on:click="downloadSong($event)">\
             <svg width="12" height="12" viewBox="0 0 2048 2048" xmlns="http://www.w3.org/2000/svg"><path d="M1803 960q0 53-37 90l-651 652q-39 37-91 37-53 0-90-37l-651-652q-38-36-38-90 0-53 38-91l74-75q39-37 91-37 53 0 90 37l294 294v-704q0-52 38-90t90-38h128q52 0 90 38t38 90v704l294-294q37-37 90-37 52 0 91 37l75 75q37 39 37 91z"/></svg>\
           </span>\
           <span v-on:click="createPopper2($event)" class="popperMenu pop-d"><?xml version="1.0" encoding="iso-8859-1"?>\

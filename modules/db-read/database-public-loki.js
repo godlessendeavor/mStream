@@ -524,8 +524,8 @@ exports.setup = function (mstream, program) {
     }
     else{
       winston.info(`Removing rated song with hash ${result[0].hash}`);
-      userMetadataCollection.chain().find({'$hash': result[0].hash}).remove();
-      // TODO: why is this not working?
+      const obj = userMetadataCollection.chain().find({ '$and':[{ 'hash': result[0].hash}, { 'user': req.user.username }] }).limit(1).data();
+      userMetadataCollection.remove(obj);
    
       userDataDb.saveDatabase(err => {
         if (err) {
