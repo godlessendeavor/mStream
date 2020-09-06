@@ -660,7 +660,7 @@ var MSTREAMPLAYER = (function () {
       onplay: function () {
       },
       onplayerror: function() {
-        console.log('PLAY ERROR');
+        console.log(`PLAY ERROR ${song.url}`);
         // TODO: need to differentiate between real errors and mobile bullshit
         // sound.once('unlock', function() {
         //   sound.play();
@@ -668,7 +668,7 @@ var MSTREAMPLAYER = (function () {
       },
       onloaderror: function() {
         // Mark Song As Error
-        console.log('SONG ERROR')
+        console.log(`SONG ERROR ${song.url}`)
         song.error = true;
         if (iziToast) {
           iziToast.error({
