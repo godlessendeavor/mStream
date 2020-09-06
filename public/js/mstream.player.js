@@ -883,8 +883,8 @@ var MSTREAMPLAYER = (function () {
   mstreamModule.playerStats.randomPlay = false;
   var randomFavoriesIgnoreArray = [];
   mstreamModule.ignoreVPaths = {};
-  mstreamModule.minRating = 0;
-  mstreamModule.maxRating = 0;
+  mstreamModule.minRating = 1;
+  mstreamModule.maxRating = 10;
 
   mstreamModule.toggleRandomPlay = function () {
     mstreamModule.playerStats.randomPlay = !mstreamModule.playerStats.randomPlay;
