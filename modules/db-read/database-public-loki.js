@@ -3,6 +3,7 @@ const loki = require('lokijs');
 const winston = require('winston');
 const sync = require('../sync');
 const util = require('util');
+const fs = require('fs');
 
 const userDataDbName = 'user-data.loki-v1.db'
 
@@ -137,7 +138,7 @@ exports.setup = function (mstream, program) {
         "track": result[0].track ? result[0].track : null,
         "title": result[0].title ? result[0].title : null,
         "year": result[0].year ? result[0].year : null,
-        "album-art": result[0].aaFile ? result[0].aaFile : null,
+        "album-art": result[0]['album-art'] ? result[0]['album-art']: null,
         "rating": result[0].rating ? result[0].rating : null
       }
     });
