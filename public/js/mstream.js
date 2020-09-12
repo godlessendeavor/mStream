@@ -60,26 +60,6 @@ $(document).ready(function () {
   $(document).on('click', '.hamburger-button', function(event) {
     $('.responsive-left-nav').toggleClass('hide-on-small');
   });
-
-  // Modals
-  $("#generateFederationInvite").iziModal({
-    title: 'Generate Federation Invitation',
-    headerColor: '#5a5a6a',
-    focusInput: false,
-    padding: 15
-  });
-  $("#acceptFederationInvite").iziModal({
-    title: 'Accept Invitation',
-    headerColor: '#5a5a6a',
-    focusInput: false,
-    padding: 15
-  });
-  $("#sharePlaylist").iziModal({
-    title: 'Share Playlist',
-    headerColor: '#5a5a6a',
-    focusInput: false,
-    padding: 15
-  });
   $('#savePlaylist').iziModal({
     title: 'Save Playlist',
     headerColor: '#5a5a6a',
@@ -113,27 +93,7 @@ $(document).ready(function () {
       });
     }
   });
-  $(document).on('click', '.trigger-accept-invite', function (event) {
-    event.preventDefault();
-    $('#acceptFederationInvite').iziModal('open');
-  });
-  $(document).on('click', '.trigger-generate-invite', function (event) {
-    // Populate the modal
-    $('#federation-invite-checkbox-area').html('');
-    for (var i = 0; i < MSTREAMAPI.currentServer.vpaths.length; i++) {
-      $('#federation-invite-checkbox-area').append('<input checked id="fed-folder-'+ MSTREAMAPI.currentServer.vpaths[i] +'" type="checkbox" name="federate-this" value="'+MSTREAMAPI.currentServer.vpaths[i]+'"><label for="fed-folder-'+ MSTREAMAPI.currentServer.vpaths[i] +'">' + MSTREAMAPI.currentServer.vpaths[i] + '</label><br>');
-    }
-
-    $('#invite-public-url').val(window.location.origin);
-
-    event.preventDefault();
-    $('#generateFederationInvite').iziModal('open');
-  });
-  $(document).on('click', '.trigger-share', function (event) {
-    event.preventDefault();
-    $('#sharePlaylist').iziModal('open');
-  });
-  $(document).on('click', '.trigger-save', function (event) {
+   $(document).on('click', '.trigger-save', function (event) {
     event.preventDefault();
     $('#savePlaylist').iziModal('open');
   });
@@ -145,10 +105,7 @@ $(document).ready(function () {
     event.preventDefault();
     $('#speedModal').iziModal('open');
   });
-  $('#generateFederationInvite').iziModal('setTop', '12%');
-  $('#acceptFederationInvite').iziModal('setTop', '12%');
   $('#savePlaylist').iziModal('setTop', '12%');
-  $('#sharePlaylist').iziModal('setTop', '12%');
   $('#aboutModal').iziModal('setTop', '10%');
   $('#speedModal').iziModal('setTop', '12%');
 
@@ -321,9 +278,6 @@ $(document).ready(function () {
 
       // set vPath
       MSTREAMAPI.currentServer.vpaths = response.vpaths;
-
-      // Federation ID
-      federationId = response.federationId;
 
       VUEPLAYER.playlists.length = 0;
       $.each(response.playlists, function () {
@@ -731,42 +685,6 @@ $(document).ready(function () {
     $('#downform').submit();
     // clear the form
     $('#downform').empty();
-  });
-
-  //////////////////////////////////////  Share playlists
-  $('#share_playlist_form').on('submit', function (e) {
-    e.preventDefault();
-
-    $('#share_it').prop("disabled", true);
-    var shareTimeInDays = $('#share_time').val();
-
-    // Check for special characters
-    if (/^[0-9]*$/.test(shareTimeInDays) == false) {
-      console.log('don\'t do that');
-      $('#share_it').prop("disabled", false);
-      return false;
-    }
-
-    //loop through array and add each file to the playlist
-    var stuff = [];
-    for (let i = 0; i < MSTREAMPLAYER.playlist.length; i++) {
-      //Do something
-      stuff.push(MSTREAMPLAYER.playlist[i].filepath);
-    }
-
-    if (stuff.length == 0) {
-      $('#share_it').prop("disabled", false);
-      return;
-    }
-
-    MSTREAMAPI.makeShared(stuff, shareTimeInDays, function (response, error) {
-      if (error !== false) {
-        return boilerplateFailure(response, error);
-      }
-      $('#share_it').prop("disabled", false);
-      var adrs = window.location.protocol + '//' + window.location.host + '/shared/playlist/' + response.playlist_id;
-      $('.share-textarea').val(adrs);
-    });
   });
 
 

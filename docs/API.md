@@ -73,13 +73,6 @@ http://yourserver.com/media/[your vPath]/path/to/song.mp3?token=XXXXXXXX
 
 [/download](API/download.md)
 
-## Share
-
-[/shared/make-shared](API/shared_make-shared.md)
-
-[/shared/get-token-and-playlist](API/shared_get-token-and-playlist.md)
-
-
 ## Login System & Authentication
 
 mStream uses a token based authentication.  The token you get when logging in can be used to access the API endpoints and the music files.
@@ -100,10 +93,3 @@ The security layer is written as a plugin.  If you don't set the username and pa
 
 If you want your tokens to work between reboots you can set the `secret` flag when booting by using `mstream -s YOUR_SECERT_STRING_HERE`.  The secret key is used to sign the tokens. If you do not set the secret key mStream will generate a random key on boot
 
-## Pages
-
-These endpoints server various parts of the webapp
-
-* /
-* /remote
-* /shared/playlist/[PLAYLIST ID]

@@ -7,12 +7,9 @@ const fs = require('fs');
 const bodyParser = require('body-parser');
 
 const dbModule = require('./modules/db-management/database-master.js');
-const jukebox = require('./modules/jukebox.js');
 const sync = require('./modules/sync.js');
-const sharedModule = require('./modules/shared.js');
 const defaults = require('./modules/defaults.js');
 const ddns = require('./modules/ddns');
-const federation = require('./modules/federation');
 
 exports.serveIt = config => {
   const program = defaults.setup(config);
@@ -57,23 +54,6 @@ exports.serveIt = config => {
   mstream.get('/j/*', (req, res) => {
     res.sendFile( 'mstream.html', { root: program.webAppDirectory });
   });
-  // It Really Whips The Llama's Ass
-  mstream.get('/winamp', (req, res) => {
-    res.sendFile('winamp.html', { root: program.webAppDirectory });
-  });
-  // Serve Shared Page
-  mstream.all('/shared/playlist/*', (req, res) => {
-    res.sendFile( 'shared.html', { root: program.webAppDirectory });
-  });
-  // Serve Jukebox Page
-  mstream.all('/remote', (req, res) => {
-    res.sendFile('remote.html', { root: program.webAppDirectory });
-  });
-
-  // JukeBox
-  jukebox.setup2(mstream, server, program);
-  // Shared
-  sharedModule.setupBeforeSecurity(mstream, program);
 
   // Login functionality
   program.auth = false;
@@ -124,9 +104,6 @@ exports.serveIt = config => {
   }
   // Scrobbler
   require('./modules/scrobbler.js').setup(mstream, program);
-  // Finish setting up the jukebox and shared
-  jukebox.setup(mstream, server, program);
-  sharedModule.setupAfterSecurity(mstream, program);
 
   // TODO: Add middleware to determine if user has access to the exact file
   // Setup all folders with express static
@@ -139,7 +116,6 @@ exports.serveIt = config => {
   server.listen(program.port, () => {
     const protocol = program.ssl && program.ssl.cert && program.ssl.key ? 'https' : 'http';
     winston.info(`Access mStream locally: ${protocol}://localhost:${program.port}`);
-    winston.info(`Try the WinAmp Demo: ${protocol}://localhost:${program.port}/winamp`);
 
     dbModule.runAfterBoot(program);
     ddns.setup(program);

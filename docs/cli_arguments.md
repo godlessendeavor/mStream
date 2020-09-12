@@ -136,13 +136,11 @@ mStream pulls serves the frontend files from the `public` folder by default.  Yo
 mstream -i my-ui-folder
 ```
 
-In order for UI folder to work, you will need three files:
+In order for UI folder to work, you will need this file:
 
 * mstream.html
-* remote.html
-* shared.html
 
-These files will be served by the `/`, `/remote`, and `/shared` endpoints respectively.
+This file will be served by the `/` endpoint.
 
 ## Log to File
 To write all logs to a file, use the `-L` flag.  If this is not set, logs will only be written to the console.  Defaults to the `/save/logs` in the root of ths project

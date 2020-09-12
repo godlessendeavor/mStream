@@ -102,7 +102,6 @@ exports.setup = function (mstream, program) {
     res.json({
       vpaths: req.user.vpaths,
       playlists: getPlaylists(req.user.username),
-      federationId: sync.getId(),
       transcode
     });
   });

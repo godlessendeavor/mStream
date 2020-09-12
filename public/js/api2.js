@@ -109,10 +109,6 @@ var MSTREAMAPI = (function () {
     makeGETRequest("/db/recursive-scan", false, callback);
   }
 
-  mstreamModule.makeShared = function (playlist, shareTimeInDays, callback) {
-    makePOSTRequest("/shared/make-shared", { time: shareTimeInDays, playlist: playlist }, callback);
-  }
-
   mstreamModule.rateSong = function (filepath, rating, callback) {
     makePOSTRequest("/db/rate-song", { filepath: filepath, rating: rating }, callback);
   }

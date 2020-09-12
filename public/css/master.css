@@ -465,17 +465,6 @@ h3 {
 }
 
 
-.share-textarea, #fed-textarea, #federation-invitation-code{
-  height: 8em;
-}
-#share_time, #federation-invite-time{
-  width: 4em;
-  float:left;
-}
-.share-time-post{
-  width: 4em;
-}
-
 .metadata-panel-text {
   margin-bottom: 10px;
   margin-top: 0px;
@@ -804,22 +793,6 @@ ul.left-nav-menu li.selected svg {
 
 .super-hide {
   display: none !important;
-}
-
-#federation-invite-checkbox-area {
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-bottom: 10px;
-}
-
-.federation-invite-thing{
-  width: calc(100% - 70px);
-  display: inline-block;
-}
-
-#federation-invite-selection-panel {
-  overflow-y: scroll;
-  max-height: 300px;
 }
 
 input[name="randomPlay-folders"] {

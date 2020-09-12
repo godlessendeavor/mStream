@@ -171,13 +171,6 @@ exports.setup = function (mstream, program) {
         return res.redirect('/access-denied');
       }
 
-      // Limit guests and federation tokens
-      if (decoded.federation || decoded.jukebox || program.users[decoded.username].guest) {
-        if (restrictedFunctions[req.path] === true) {
-          return res.redirect('/access-denied');          
-        }
-      }
-
       // Setup user variable for api endpoints to access
       req.user = program.users[decoded.username];
       req.user.username = decoded.username;
