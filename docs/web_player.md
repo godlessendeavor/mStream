@@ -30,7 +30,7 @@ When adding a song to the queue you add it in an object form. The object must co
       "track": 1,
       "title": "",
       "year": 1990,
-      "album-art": "hash.jpg"
+      "aaFile": "hash.jpg"
     }
   }
 ```

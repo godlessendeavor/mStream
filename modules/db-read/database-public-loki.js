@@ -24,7 +24,7 @@ const mapFunDefault = function(left, right) {
     track: left.track,
     title: left.title,
     year: left.year,
-    'album-art': left.aaFile,
+    aaFile: left.aaFile,
     filepath: left.filepath,
     rating: right.rating,
     vpath: left.vpath
@@ -138,7 +138,7 @@ exports.setup = function (mstream, program) {
         "track": result[0].track ? result[0].track : null,
         "title": result[0].title ? result[0].title : null,
         "year": result[0].year ? result[0].year : null,
-        "album-art": result[0]['album-art'] ? result[0]['album-art']: null,
+        "aaFile": result[0].aaFile ? result[0].aaFile: null,
         "rating": result[0].rating ? result[0].rating : null
       }
     });
@@ -280,7 +280,7 @@ exports.setup = function (mstream, program) {
             "track": result[0].track ? result[0].track : null,
             "title": result[0].title ? result[0].title : null,
             "year": result[0].year ? result[0].year : null,
-            "album-art": result[0].aaFile ? result[0].aaFile : null,
+            "aaFile": result[0].aaFile ? result[0].aaFile: null,
             "rating": result[0].rating ? result[0].rating : null
           };
         }
@@ -448,7 +448,7 @@ exports.setup = function (mstream, program) {
             "track": row.track ? row.track : null,
             "title": row.title ? row.title : null,
             "year": row.year ? row.year : null,
-            "album-art": row.aaFile ? row.aaFile : null,
+            "aaFile": row.aaFile ? row.aaFile : null,
             "filename": fe.basename(row.filepath),
             "rating": row.rating ? row.rating : null
           }
@@ -678,7 +678,7 @@ exports.setup = function (mstream, program) {
         "track": randomSong.track ? randomSong.track : randomSong.filepath,
         "title": randomSong.title ? randomSong.title : null,
         "year": randomSong.year ? randomSong.year : null,
-        "album-art": randomSong.aaFile ? randomSong.aaFile : null,
+        "aaFile": randomSong.aaFile ? randomSong.aaFile: null,
         "rating": randomSong.rating ? randomSong.rating : null
       }
     });
@@ -778,7 +778,7 @@ exports.setup = function (mstream, program) {
         track: right.track,
         title: right.title,
         year: right.year,
-        'album-art': right.aaFile,
+        aaFile: right.aaFile,
         filepath: right.filepath,
         rating: left.rating,
         vpath: right.vpath
@@ -810,7 +810,7 @@ exports.setup = function (mstream, program) {
           "track": row.track ? row.track : null,
           "title": row.title ? row.title : null,
           "year": row.year ? row.year : null,
-          "album-art": row.aaFile ? row.aaFile : null,
+          "aaFile": row.aaFile ? row.aaFile : null,
           "filename": fe.basename(row.filepath),
           "rating": row.rating ? row.rating : null
         }
@@ -862,7 +862,7 @@ exports.setup = function (mstream, program) {
           "track": row.track ? row.track : null,
           "title": row.title ? row.title : null,
           "year": row.year ? row.year : null,
-          "album-art": row.aaFile ? row.aaFile : null,
+          "aaFile": row.aaFile ? row.aaFile : null,
           "filename": fe.basename(row.filepath),
           "rating": row.rating ? row.rating : null
         }

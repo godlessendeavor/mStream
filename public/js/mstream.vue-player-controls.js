@@ -330,10 +330,10 @@ var VUEPLAYER = (function () {
       },
       computed: {
         albumArtPath: function () {
-          if (!this.meta['album-art']) {
+          if (!this.meta.aaFile) {
             return '/public/img/default.png';
           }
-          return '/album-art/' + this.meta['album-art'] + '?token=' + MSTREAMAPI.currentServer.token;
+          return '/album-art/' + this.meta.aaFile + '?token=' + MSTREAMAPI.currentServer.token;
         }
       }
     });

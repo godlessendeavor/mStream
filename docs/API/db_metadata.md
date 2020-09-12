@@ -38,7 +38,7 @@
         "track": 1,
         "title": "Song Title",
         "year": 1990,
-        "album-art": "hash.jpg",
+        "aaFile": "hash.jpg",
         "hash": "md5 hash"
       }
     }

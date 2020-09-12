@@ -516,7 +516,7 @@ var MSTREAMPLAYER = (function () {
         mstreamModule.playerStats.metadata.title = curSong.filepath; 
       }
       mstreamModule.playerStats.metadata.year = curSong.metadata.year;
-      mstreamModule.playerStats.metadata['album-art'] = curSong.metadata['album-art'];
+      mstreamModule.playerStats.metadata.aaFile = curSong.metadata.aaFile;
     }
   }
 
@@ -620,7 +620,7 @@ var MSTREAMPLAYER = (function () {
       "track": false,
       "title": false,
       "year": false,
-      "album-art": false,
+      "aaFile": false,
       "filepath": false,
     }
   }
