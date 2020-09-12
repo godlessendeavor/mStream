@@ -94,10 +94,6 @@ exports.serveIt = config => {
   require('./modules/file-explorer.js').setup(mstream, program);
   // Load database
   dbModule.setup(mstream, program);
-  if (program.federation && program.federation.folder) {
-    federation.setup(mstream, program);
-    sync.setup(program);
-  }
   // Transcoder
   if (program.transcode && program.transcode.enabled === true) {
     require("./modules/ffmpeg.js").setup(mstream, program);
