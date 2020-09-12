@@ -19,12 +19,7 @@ const restrictedFunctions = {
   '/playlist/remove-song': true,
   '/playlist/save': true,
   '/playlist/delete': true,
-  '/shared/make-shared': true,
-  '/upload': true,
-  '/federation/invite/generate': true,
-  '/federation/invite/accept': true,
-  '/federation/invite/exchange': true,
-  '/federation/stats': true
+  '/upload': true
 }
 
 function generateSaltedPassword(password, callback) {
@@ -149,7 +144,7 @@ exports.setup = function (mstream, program) {
       }
 
       // Invite tokens are not allowed access 
-      if(decoded.invite === true && req.path === '/federation/invite/exchange') {
+      if(decoded.invite === true) {
         return next();
       } else if(decoded.invite === true) {
         return res.redirect('/access-denied');
