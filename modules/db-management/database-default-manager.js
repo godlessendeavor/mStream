@@ -79,11 +79,11 @@ function* scanDirectory(directoryToScan) {
   process.exit(0);
 }
 
-// Get all files form DB and add to globalCurrentFileList
+// Get all files from DB and add to globalCurrentFileList
 function pullFromDB() {
   dbRead.getVPathFiles(loadJson.vpath, function (rows) {
     for (var s of rows) {
-      globalCurrentFileList[s.filepath] = s.modified;
+      //globalCurrentFileList[s.filepath] = s.modified;
     }
   });
 }
@@ -153,9 +153,11 @@ function parseFile(thisSong) {
     console.error(`Warning: metadata parse error on ${thisSong}: ${err.message}`);
     return {track: { no: null, of: null }, disk: { no: null, of: null }};
   }).then(songInfo => {
+    //console.info(`Calculating the hash for ${thisSong}`);
     songInfo.modified = fileStat.mtime.getTime();
     songInfo.filePath = fe.relative(loadJson.directory, thisSong);
     songInfo.format = getFileType(thisSong);
+    //console.info(`Calculating the hash2 for ${thisSong}`);
     // Calculate unique DB ID
     return calculateHash(thisSong, songInfo);
   }).then(songInfo => {
@@ -187,15 +189,26 @@ function calculateHash(thisSong, songInfo) {
 
     // Album art is in metadata
     if (songInfo.picture && songInfo.picture[0]) {
+      //console.debug(`Album art in metadata for ${fe.dirname(thisSong)}`);
       bufferString = songInfo.picture[0].data.toString('utf8');
       picFormat = mime.extension(songInfo.picture[0].format);
     }
     // Album art has been pulled from directory already
-    else if (mapOfDirectoryAlbumArt.hasOwnProperty(fe.dirname(thisSong)) && mapOfDirectoryAlbumArt[fe.dirname(thisSong)] !== false) {
+    else if (mapOfDirectoryAlbumArt.hasOwnProperty(fe.dirname(thisSong)) && 
+             mapOfDirectoryAlbumArt[fe.dirname(thisSong)] !== false) {  
+      //console.debug(`Album art from directory ${fe.dirname(thisSong)} is ${songInfo.aaFile}`);
       songInfo.aaFile = mapOfDirectoryAlbumArt[fe.dirname(thisSong)];
     }
     // Directory has not been scanned for album art yet
     else if (!mapOfDirectoryAlbumArt.hasOwnProperty(fe.dirname(thisSong))) {
+      //console.debug(`Album has not been scanned yet ${fe.dirname(thisSong)}`);
+      var albumArt = checkDirectoryForAlbumArt(fe.dirname(thisSong));
+      if (albumArt) {
+        songInfo.aaFile = albumArt;
+      }
+    }
+    else{
+      console.warn(`We forget to include ${thisSong}!!!!`);
       var albumArt = checkDirectoryForAlbumArt(fe.dirname(thisSong));
       if (albumArt) {
         songInfo.aaFile = albumArt;
@@ -233,9 +246,11 @@ function calculateHash(thisSong, songInfo) {
 }
 
 function checkDirectoryForAlbumArt(directory) {
+ 
   if (loadJson.skipImg === true) {
     return false;
   }
+ 
   var files = fs.readdirSync(directory);
   var imageArray = [];
 
@@ -257,8 +272,10 @@ function checkDirectoryForAlbumArt(directory) {
     if (["png", "jpg"].indexOf(getFileType(files[i])) === -1) {
       continue;
     }
+
     imageArray.push(files[i]);
   }
+
 
   if (imageArray.length === 0) {
     mapOfDirectoryAlbumArt[directory] = false;
@@ -273,10 +290,11 @@ function checkDirectoryForAlbumArt(directory) {
     imageBuffer = fs.readFileSync(fe.join(directory, imageArray[0]));
     picFormat = getFileType(imageArray[0]);
   }else {
-    // If there are multiple images, choose the first one with name cover, album, folder, etc
+    // If there are multiple images, choose the first one with name front
     for (var i = 0; i < imageArray.length; i++) {
       const imgMod = imageArray[i].toLowerCase();
-      if (imgMod === 'folder.jpg' || imgMod === 'cover.jpg' || imgMod === 'album.jpg' || imgMod === 'folder.png' || imgMod === 'cover.png' || imgMod === 'album.png') {
+      if (imgMod.includes('front')) {
+        //console.info(`Adding image ${imgMod}`);
         imageBuffer = fs.readFileSync(fe.join(directory, imageArray[i]));
         picFormat = getFileType(imageArray[i]);
         break;
@@ -284,11 +302,10 @@ function checkDirectoryForAlbumArt(directory) {
     }
   }
 
-  // TODO: If none match, choose the largest ???
-
+  //If none match, choose the first image
   if (!imageBuffer) {
-    mapOfDirectoryAlbumArt[directory] = false;
-    return;
+      imageBuffer = fs.readFileSync(fe.join(directory, imageArray[0]));
+      picFormat = getFileType(imageArray[0]);
   }
 
   const picHashString = crypto.createHash('md5').update(imageBuffer.toString('utf8')).digest('hex');
