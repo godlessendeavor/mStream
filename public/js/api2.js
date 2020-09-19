@@ -152,6 +152,10 @@ var MSTREAMAPI = (function () {
     mstreamModule.currentServer.vpaths = vpaths;
   }
 
+  mstreamModule.getAlbumArt = function (filepath, callback) {
+    makePOSTRequest("/album-art", filepath, callback);
+  }
+
   mstreamModule.ping = function (callback) {
     makeGETRequest("/ping", false, callback);
   }

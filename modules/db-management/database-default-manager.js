@@ -26,6 +26,7 @@ const fs = require('fs');
 const fe = require('path');
 const crypto = require('crypto');
 const mime = require('mime-types');
+const util = require('util');
 
 // Only parse these file types
 const fileTypesArray = ["mp3", "flac", "wav", "ogg", "aac", "m4a", "opus"];
@@ -35,9 +36,10 @@ const fileTypesArray = ["mp3", "flac", "wav", "ogg", "aac", "m4a", "opus"];
 const dbRead = require('../db-write/database-default-loki.js');
 
 // Global Vars
-const globalCurrentFileList = {};  // Map of file paths to metadata
+const globalCurrentFileList = {};  // Map of file paths to songs
 const listOfFilesToParse = [];
 const listOfFilesToDelete = [];
+const listOfSongsToUpdate = [];
 const mapOfDirectoryAlbumArt = {};
 
 // Start the generator
@@ -58,6 +60,9 @@ function* scanDirectory(directoryToScan) {
   pullFromDB();
   // Loop through current files and compare them to the files pulled from the DB
   recursiveScan(directoryToScan);
+  
+  dbRead.updateEntries(listOfSongsToUpdate);
+
   // Delete Files
   for (var i = 0; i < listOfFilesToDelete.length; i++) {
     deleteFile(listOfFilesToDelete[i]);
@@ -82,8 +87,8 @@ function* scanDirectory(directoryToScan) {
 // Get all files from DB and add to globalCurrentFileList
 function pullFromDB() {
   dbRead.getVPathFiles(loadJson.vpath, function (rows) {
-    for (var s of rows) {
-      //globalCurrentFileList[s.filepath] = s.modified;
+    for (var song of rows) {
+      globalCurrentFileList[song.filepath] = song;
     }
   });
 }
@@ -95,6 +100,8 @@ function recursiveScan(dir) {
   } catch (err) {
     return;
   }
+
+  var aaFile = checkDirectoryForAlbumArt(dir);
 
   // loop through files
   for (var i = 0; i < files.length; i++) {
@@ -121,8 +128,15 @@ function recursiveScan(dir) {
         continue;
       }
 
+      // check if the album art has changed
+      if (aaFile !== undefined && aaFile !== false && aaFile !== globalCurrentFileList[fe.relative(loadJson.directory, filepath)].aaFile){
+        console.log(`New cover file ${aaFile} is being added to the DB`);
+        globalCurrentFileList[fe.relative(loadJson.directory, filepath)].aaFile = aaFile;
+        listOfSongsToUpdate.push(globalCurrentFileList[fe.relative(loadJson.directory, filepath)]);
+      }
+
       // check the file_modified_date
-      if (stat.mtime.getTime() !== globalCurrentFileList[fe.relative(loadJson.directory, filepath)]) {
+      if (stat.mtime.getTime() !== globalCurrentFileList[fe.relative(loadJson.directory, filepath)].modified) {
         listOfFilesToParse.push(fe.relative(loadJson.directory, filepath));
         listOfFilesToDelete.push(filepath);
       }
@@ -157,7 +171,6 @@ function parseFile(thisSong) {
     songInfo.modified = fileStat.mtime.getTime();
     songInfo.filePath = fe.relative(loadJson.directory, thisSong);
     songInfo.format = getFileType(thisSong);
-    //console.info(`Calculating the hash2 for ${thisSong}`);
     // Calculate unique DB ID
     return calculateHash(thisSong, songInfo);
   }).then(songInfo => {
@@ -183,38 +196,10 @@ function parseFile(thisSong) {
 function calculateHash(thisSong, songInfo) {
   return new Promise((resolve, reject) => {
     // Handle album art
-    //  TODO: handle cases where multiple images in metadata
-    var bufferString = false;
-    var picFormat = false;
-
-    // Album art is in metadata
-    if (songInfo.picture && songInfo.picture[0]) {
-      //console.debug(`Album art in metadata for ${fe.dirname(thisSong)}`);
-      bufferString = songInfo.picture[0].data.toString('utf8');
-      picFormat = mime.extension(songInfo.picture[0].format);
+    var albumArt = checkDirectoryForAlbumArt(fe.dirname(thisSong));
+    if (albumArt) {
+      songInfo.aaFile = albumArt;
     }
-    // Album art has been pulled from directory already
-    else if (mapOfDirectoryAlbumArt.hasOwnProperty(fe.dirname(thisSong)) && 
-             mapOfDirectoryAlbumArt[fe.dirname(thisSong)] !== false) {  
-      //console.debug(`Album art from directory ${fe.dirname(thisSong)} is ${songInfo.aaFile}`);
-      songInfo.aaFile = mapOfDirectoryAlbumArt[fe.dirname(thisSong)];
-    }
-    // Directory has not been scanned for album art yet
-    else if (!mapOfDirectoryAlbumArt.hasOwnProperty(fe.dirname(thisSong))) {
-      //console.debug(`Album has not been scanned yet ${fe.dirname(thisSong)}`);
-      var albumArt = checkDirectoryForAlbumArt(fe.dirname(thisSong));
-      if (albumArt) {
-        songInfo.aaFile = albumArt;
-      }
-    }
-    else{
-      console.warn(`We forget to include ${thisSong}!!!!`);
-      var albumArt = checkDirectoryForAlbumArt(fe.dirname(thisSong));
-      if (albumArt) {
-        songInfo.aaFile = albumArt;
-      }
-    }
-
 
     // Hash the file here and add the hash to the DB
     var hash = crypto.createHash('md5');
@@ -226,17 +211,6 @@ function calculateHash(thisSong, songInfo) {
       readableStream2.close();
 
       songInfo.hash = String(hash.read());
-
-      if (bufferString) {
-        // Generate unique name based off hash of album art and metadata
-        const picHashString = crypto.createHash('md5').update(bufferString).digest('hex');
-        songInfo.aaFile = picHashString + '.' + picFormat;
-        // Check image-cache folder for filename and save if doesn't exist
-        if (!fs.existsSync(fe.join(loadJson.albumArtDirectory, songInfo.aaFile))) {
-          // Save file sync
-          fs.writeFileSync(fe.join(loadJson.albumArtDirectory, songInfo.aaFile), songInfo.picture[0].data);
-        }
-      }
 
       resolve(songInfo);
     });
@@ -279,42 +253,31 @@ function checkDirectoryForAlbumArt(directory) {
 
   if (imageArray.length === 0) {
     mapOfDirectoryAlbumArt[directory] = false;
-    return;
+    return false;
   }
 
-  var imageBuffer = false;
-  var picFormat = false;
+  var aaFile = false;
 
   // Only one image, assume it's album art
   if (imageArray.length === 1) {
-    imageBuffer = fs.readFileSync(fe.join(directory, imageArray[0]));
-    picFormat = getFileType(imageArray[0]);
+    aaFile = fe.join(directory, imageArray[0]);
+    aaFile = fe.relative(loadJson.directory, aaFile);
   }else {
     // If there are multiple images, choose the first one with name front
     for (var i = 0; i < imageArray.length; i++) {
       const imgMod = imageArray[i].toLowerCase();
       if (imgMod.includes('front')) {
-        //console.info(`Adding image ${imgMod}`);
-        imageBuffer = fs.readFileSync(fe.join(directory, imageArray[i]));
-        picFormat = getFileType(imageArray[i]);
+        aaFile = fe.join(directory, imageArray[i]);
+        aaFile = fe.relative(loadJson.directory, aaFile);
         break;
       }
     }
   }
 
   //If none match, choose the first image
-  if (!imageBuffer) {
-      imageBuffer = fs.readFileSync(fe.join(directory, imageArray[0]));
-      picFormat = getFileType(imageArray[0]);
-  }
-
-  const picHashString = crypto.createHash('md5').update(imageBuffer.toString('utf8')).digest('hex');
-  const aaFile = picHashString + '.' + picFormat;
-
-  // Check image-cache folder for filename and save if doesn't exist
-  if (!fs.existsSync(fe.join(loadJson.albumArtDirectory, aaFile))) {
-    // Save file sync
-    fs.writeFileSync(fe.join(loadJson.albumArtDirectory, aaFile), imageBuffer);
+  if (!aaFile) {
+      aaFile = fe.join(directory, imageArray[0]);
+      aaFile = fe.relative(loadJson.directory, aaFile);
   }
 
   mapOfDirectoryAlbumArt[directory] = aaFile;

@@ -199,47 +199,6 @@ mStream comes with SSL support built in.  Just add your key and cert and the ser
   "noUpload": true
 ```
 
-## LastFM Scrobbling
-
-Each user can have their own lastFM credentials
-
-```json
-{
-  "folders": {
-    "jake-music": "/media/jake/music",
-    "finn-music": "/media/finn/music",
-    "audiobooks": "/media/books/audio"
-  },
-  "users": {
-    "jake": {
-      "password":"p@ssword",
-      "vpaths": ["jake-music", "audiobooks"],
-      "lastfm-user": "username",
-      "lastfm-password": "password"
-    },
-    "finn": {
-      "password":"p@ssword",
-      "vpaths": ["finn-music", "audiobooks"],
-      "lastfm-user": "username2",
-      "lastfm-password": "password2"
-    }
-  }
-}
-```
-
-If you want to use LastFM scrobbling without a user system, you can do the following
-
-```json
-{
-  "folders": {
-    "music": "/media/music",
-    "audiobooks": "/media/books/audio"
-  },
-  "lastfm-user": "username",
-  "lastfm-password": "password"
-}
-```
-
 ## Storage
 
 mStream will write, logs, DB files, and album art to the filesystem.  By default these will be written in the mStream project folder tothe `save` and `image-cache` folders.  Use the `storage` object to choose where to save these files

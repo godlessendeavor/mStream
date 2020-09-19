@@ -1,5 +1,6 @@
 // These functions will take in JSON arrays of song data and then save that dat to the DB
 const loki = require('lokijs');
+const util = require('util');
 var filesdb;
 var fileCollection;
 
@@ -62,6 +63,8 @@ exports.insertEntries = function (arrayOfSongs, vpath) {
     while (arrayOfSongs.length > 0) {
       const song = arrayOfSongs.pop();
 
+      console.log(`Going to insert song with aaFile ${song.aaFile}`);
+
       fileCollection.insert({
         "title": song.title ? String(song.title) : null,
         "artist": song.artist ? String(song.artist) : null,
@@ -88,6 +91,28 @@ exports.insertEntries = function (arrayOfSongs, vpath) {
     resolve();
   });
 }
+
+exports.updateEntries = function (arrayOfSongs) {
+  return new Promise((resolve, reject) => {
+    while (arrayOfSongs.length > 0) {
+      const song = arrayOfSongs.pop();
+
+      console.log(`Going to update song ${song.filepath}`);
+
+      fileCollection.update(song);
+
+      saveCounter++;
+      if (saveCounter === saveInterval) {
+        saveCounter = 0;
+        saveDB();
+      }
+    }
+
+    resolve();
+  });
+}
+
+
 
 exports.deleteFile = function (path, callback) {
   fileCollection.findAndRemove({ 'filepath': { '$eq': path } });

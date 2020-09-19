@@ -545,15 +545,41 @@ exports.setup = function (mstream, program) {
       return;
     }
 
-    const result = userMetadataCollection.clear();
-
-    res.json({});
+    const result = userMetadataCollection.chain().remove();
 
     userDataDb.saveDatabase(err => {
       if (err) {
         winston.error(`DB Save Error : ${err}`);
       }
     });
+
+    res.json({});
+  });
+
+  mstream.post('/db/clear-all', (req, res) => {
+
+    if (!fileCollection) {
+      res.status(500).json({ error: 'No DB' });
+      return;
+    }
+
+    const result = fileCollection.removeDataOnly();
+    const result2 = userMetadataCollection.removeDataOnly();
+    console.log('Removing everything!!!');
+
+    filesDB.saveDatabase(err => {
+      if (err) {
+        winston.error(`DB Save Error : ${err}`);
+      }
+    });
+
+    userDataDb.saveDatabase(err => {
+      if (err) {
+        winston.error(`DB Save Error : ${err}`);
+      }
+    });
+
+    res.json({});
   });
 
   mstream.get('/db/amount-rated-songs', (req, res) => {

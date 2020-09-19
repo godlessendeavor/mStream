@@ -79,13 +79,6 @@ mstream -s /path/to/secret/file
 
 If not set mStream will generate a random string to use as the secret key on boot.  If rebooted, the secret key will be regenerated and any previous keys will no longer work
 
-## LastFM Scrobbling
-
-The webapp will automatically scrobble songs after 30 seconds of play.  Add you last FM credentials to take advantage of this feature
-
-```
-mstream -l username -z password
-```
 
 ## Database Path
 

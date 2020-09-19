@@ -87,6 +87,8 @@ exports.serveIt = config => {
   }
 
   // Album art endpoint
+  // TODO: this should different per user. It should be the same as the music path
+  // For now on config we set it up in the config as the same folder
   mstream.use('/album-art', express.static(program.storage.albumArtDirectory));
   // Download Files API
   require('./modules/download.js').setup(mstream, program);
