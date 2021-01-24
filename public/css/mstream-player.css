@@ -119,8 +119,8 @@
   background-color: #9E9E9E;
 }
 
-.songDropdown, .downloadPlaylistSong, .recursiveAddDir, .addFileplaylist {
-  height: 14px;
+.songDropdown, .downloadPlaylistSong, .recursiveAddDir, .addFileplaylist, .movePath {
+  height: 22px;
   background-color: #B5B5B5;
   float: right;
   text-align: center;
@@ -140,13 +140,13 @@
   min-width: 38px !important;
 }
 
-.popperMenu:hover, .downloadDir:hover, .downloadFileplaylist:hover {
+.popperMenu:hover, .downloadDir:hover, .downloadFileplaylist:hover, .movePath:hover {
   background-color: #9E9E9E;
 }
 
-.popperMenu, .downloadDir, .downloadFileplaylist {
+.popperMenu, .downloadDir, .downloadFileplaylist, .movePath {
   min-width: 28px !important;
-  height: 14px;
+  height: 22px;
   background-color: #B5B5B5;
   float: right;
   text-align: center;
@@ -193,7 +193,7 @@
   padding-top: 1px;
   cursor: pointer;
   min-width: 28px !important;
-  height: 14px;
+  height: 22px;
   background-color: 	rgba(255,0,0, .7);
   float: right;
   text-align: center;
