@@ -273,6 +273,26 @@ exports.setup = function(mstream, program) {
     res.json(recursiveTrot(pathInfo.fullPath, [], pathInfo.relativePath));
   });
 
+  mstream.post('/files/move-album', function(req, res){
+    if (!req.body.album) {
+      return res.status(422).json({ error: "Missing Directory to move album" });
+    }
+    if (!req.body.path) {
+      return res.status(422).json({ error: "Missing full path to move album" });
+    }
+
+    const pathInfo = program.getVPathInfo(req.body.path, req.user);
+    if (!pathInfo) { return res.status(500).json({ error: "Could not parse directory" }); }
+
+    // Make sure it's a directory
+    if (!fs.statSync(pathInfo.fullPath).isDirectory()) {
+      res.status(500).json({ error: "Not a directory" });
+      return;
+    }
+
+    winston.info(`Moving album ${req.body.album} from ${req.body.path} at ${pathInfo.fullPath}`);
+
+  });
 
 
 };
