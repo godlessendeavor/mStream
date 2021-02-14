@@ -1,5 +1,5 @@
 const Busboy = require("busboy");
-const fs = require("fs");
+const fs = require("fs-extra");
 const fe = require("path");
 const archiver = require('archiver');
 const winston = require('winston');
@@ -289,8 +289,61 @@ exports.setup = function(mstream, program) {
       res.status(500).json({ error: "Not a directory" });
       return;
     }
+    var pathArr = req.body.path.split('/');
+    if (pathArr.length <= 3){
+      winston.info(`Selected path ${req.body.path} is not an album. It needs to be inside a band path`); 
+      res.status(500).json({ error: `Selected path ${req.body.path} is not an album. It needs to be inside a band path`});
+      return;
+    }
+    var bandName = pathArr[pathArr.length - 2];
+    var album = pathArr[pathArr.length - 1];
+    //TODO: check that album validates the norms of Year - Title
 
-    winston.info(`Moving album ${req.body.album} from ${req.body.path} at ${pathInfo.fullPath}`);
+    //TODO: main path is hardcoded with name "collection" this should be configurable
+    var mainPath = program.getVPathInfo("media", req.user);
+
+    let files;
+    try {
+      files = fs.readdirSync(mainPath.fullPath);
+    } catch (err) {
+      res.status(500).json({ error: "Could not read main directory" });
+      return;
+    }
+
+    var copied = false;
+    //search for directory of band in main collection
+    for (var i = 0; i < files.length; i++) {
+      const filepath = fe.join(mainPath.fullPath, files[i]);
+      try {
+        var stat = fs.statSync(filepath);
+      } catch (error) {
+        // Bad file, ignore and continue
+        continue;
+      }
+      if (stat.isDirectory()) {
+        if (files[i].toLowerCase() == bandName.toLowerCase()){
+          //Found same band
+          winston.info(`Found band ${bandName}`);
+          var newDir = fe.join(filepath, album);
+          if (fs.existsSync(newDir)){
+            res.status(500).json({ error: `Directory ${newDir} alreayd exists`});
+            return;
+          }
+
+          fs.copy(pathInfo.fullPath, newDir, function (err) {
+            winston.info(`Copying ${pathInfo.fullPath} to ${newDir}`);
+            if (err) {
+              res.status(500).json({ error: `Could not rename directory ${pathInfo.fullPath} to ${newDir} ${err}`});
+              return;
+            }
+            winston.info(`Copied ${pathInfo.fullPath} to ${newDir}`);
+            res.status(200).json({result: `Successfully moved ${pathInfo.fullPath} to main collection ${newDir}`});
+            return;
+          })
+        }
+      }
+
+    }
 
   });
 

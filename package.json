@@ -97,6 +97,7 @@
     "fast-xml-parser": "^3.16.0",
     "ffbinaries": "^1.1.4",
     "fluent-ffmpeg": "^2.1.2",
+    "fs-extra": "^8.1.0",
     "inquirer": "^7.0.3",
     "inquirer-select-directory": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
