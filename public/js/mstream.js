@@ -705,6 +705,11 @@ $(document).ready(function () {
       if (err !== false) {
         return boilerplateFailure(res, err);        
       }
+      iziToast.success({
+        title: 'Album moved to main collection',
+        position: 'topCenter',
+        timeout: 3000
+      });
     });
   });
 
