@@ -298,7 +298,7 @@ exports.setup = function(mstream, program) {
     var bandName = pathArr[pathArr.length - 2];
     var album = pathArr[pathArr.length - 1];
     //check that album validates the norms of Year - Title
-    if (!/^[0-9][ ]+-[ ]+.+$/.test(album)) {
+    if (!/^[0-9]{4} - +.+$/.test(album)) {
       winston.info(`Album ${album} does not comply to format: Year - Title`); 
       res.status(422).json({ error: `Album ${album} does not comply to format: Year - Title`});
       return;
