@@ -286,18 +286,23 @@ exports.setup = function(mstream, program) {
 
     // Make sure it's a directory
     if (!fs.statSync(pathInfo.fullPath).isDirectory()) {
-      res.status(500).json({ error: "Not a directory" });
+      res.status(422).json({ error: "Not a directory" });
       return;
     }
     var pathArr = req.body.path.split('/');
     if (pathArr.length <= 3){
       winston.info(`Selected path ${req.body.path} is not an album. It needs to be inside a band path`); 
-      res.status(500).json({ error: `Selected path ${req.body.path} is not an album. It needs to be inside a band path`});
+      res.status(422).json({ error: `Selected path ${req.body.path} is not an album. It needs to be inside a band path`});
       return;
     }
     var bandName = pathArr[pathArr.length - 2];
     var album = pathArr[pathArr.length - 1];
-    //TODO: check that album validates the norms of Year - Title
+    //check that album validates the norms of Year - Title
+    if (!/^[0-9][ ]+-[ ]+.+$/.test(album)) {
+      winston.info(`Album ${album} does not comply to format: Year - Title`); 
+      res.status(422).json({ error: `Album ${album} does not comply to format: Year - Title`});
+      return;
+    }
 
     //TODO: main path is hardcoded with name "collection" this should be configurable
     var mainPath = program.getVPathInfo("media", req.user);
