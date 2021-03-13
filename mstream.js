@@ -69,11 +69,6 @@ exports.serveIt = config => {
       }
     };
 
-    if (program['lastfm-user'] && program['lastfm-password']) {
-      program.users['mstream-user']['lastfm-user'] = program['lastfm-user'];
-      program.users['mstream-user']['lastfm-password'] = program['lastfm-password'];
-    }
-
     // Fill in user vpaths
     Object.keys(program.folders).forEach( key => {
       program.users['mstream-user'].vpaths.push(key);

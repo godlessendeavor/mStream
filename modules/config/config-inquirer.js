@@ -243,68 +243,8 @@ function addOneUser(current) {
 
         return true;
       }
-    },
-    {
-      message: 'Add a LastFM account?',
-      type: "confirm",
-      name: "confirm",
-      default: false,
-      validate: answer => {
-        if(answer.confirm === true) {
-          return true;
-        }
-        return false;
-      },
     }])
-    .then(ans => {
-      answers = ans;
-      if(!answers.confirm) {
-        return hashPassword(answers.password);
-      } else {
-        return inquirer.prompt([{
-          message: 'LastFM Username',
-          type: "input",
-          name: "lastfmUser",
-          validate: answer => {
-            if (answer.length < 1) {
-              return 'You need a username';
-            }
-            return true;
-          }
-        },
-        {
-          message: "LastFM Password:",
-          type: "password",
-          name: "lastfmPass",
-          validate: answer => {
-            if (answer.length < 1) {
-              return 'You need a password';
-            }
-            return true;
-          }
-        }])
-        .then(a2 => {
-          answers.lastfmUser = a2.lastfmUser;
-          answers.lastfmPass = a2.lastfmPass;
-          return hashPassword(answers.password);
-        });
-      }
-    })
-    .then((hashObj) => {
-      if(!current.users){
-        current.users = {};
-      }
-      current.users[answers.username] = {
-        vpaths: answers.vpaths,
-        password: hashObj.hashPassword,
-        salt: hashObj.salt
-      };
 
-      if (answers.lastfmUser && answers.lastfmUser) {
-        current.users[answers.username]['lastfm-user'] = answers.lastfmUser;
-        current.users[answers.username]['lastfm-password'] = answers.lastfmPass;
-      }
-    });
 }
 
 function hashPassword(password) {
@@ -908,7 +848,8 @@ async function folderLoop(loadJson) {
       name: "userList",
       choices: [{ name: ' ← Go Back', value: 'finished' }, 
         new inquirer.Separator(),
-        { name: ' * Add A Directory', value: 'addFolder' },
+        { name: ' * Add the main Directory', value: 'addMainFolder' },
+        { name: ' * Add a secondary Directory', value: 'addSecondaryFolder' },
         { name: ' * Remove A Directory', value: 'deleteFolder' }
       ]
     }]).then(answers => {
@@ -916,16 +857,30 @@ async function folderLoop(loadJson) {
     });
 
     switch (editUsers.userList) {
-      case 'addFolder':
+      case 'addMainFolder':
         console.clear();
         console.log();
         console.log(colors.blue.bold('mStream Configuration Wizard'));
-        console.log(colors.magenta('Add Music Directory'));
+        console.log(colors.magenta('Add main Music Directory'));
         console.log();
         try {
           const newDir = await addNewFolder();
           const folderAlias = await namePathAlias(loadJson);
-          loadJson.folders[folderAlias] = { root: newDir };
+          loadJson.folders[folderAlias] = { root: newDir, main: true};
+        } catch (err) {
+          printErr = err.message;
+        }
+        break;
+      case 'addSecondaryFolder':
+        console.clear();
+        console.log();
+        console.log(colors.blue.bold('mStream Configuration Wizard'));
+        console.log(colors.magenta('Add secondary Music Directory'));
+        console.log();
+        try {
+          const newDir = await addNewFolder();
+          const folderAlias = await namePathAlias(loadJson);
+          loadJson.folders[folderAlias] = { root: newDir , main: false};
         } catch (err) {
           printErr = err.message;
         }
@@ -979,18 +934,19 @@ async function userLoop(loadJson) {
         new inquirer.Separator(),
         { name: ' * Add A User', value: 'addUser' },
         { name: ' * Remove Users', value: 'removeUser' },
-        { name: ' * Add A Directory', value: 'addFolder' }
+        { name: ' * Add the main Directory', value: 'addMainFolder' },
+        { name: ' * Add a secondary Directory', value: 'addSecondaryFolder' },
       ]
     }]).then(answers => {
       return answers;
     });
 
     switch (editUsers.userList) {
-      case 'addFolder':
+      case 'addMainFolder':   //TODO: prevent adding more than one main folder
         console.clear();
         console.log();
         console.log(colors.blue.bold('mStream Configuration Wizard'));
-        console.log(colors.magenta('Add Music Directory'));
+        console.log(colors.magenta('Add main Music Directory'));
         console.log();
         try {
           if (!loadJson.folders || typeof loadJson.folders !== 'object') {
@@ -998,11 +954,28 @@ async function userLoop(loadJson) {
           }
           const newDir = await addNewFolder();
           const folderAlias = await namePathAlias(loadJson);
-          loadJson.folders[folderAlias] = { root: newDir };
+          loadJson.folders[folderAlias] = { root: newDir, main: true };
         } catch (err) {
           printErr = err.message;
         }
         break;
+      case 'addSecondaryFolder':
+          console.clear();
+          console.log();
+          console.log(colors.blue.bold('mStream Configuration Wizard'));
+          console.log(colors.magenta('Add a secondary Music Directory'));
+          console.log();
+          try {
+            if (!loadJson.folders || typeof loadJson.folders !== 'object') {
+              loadJson.folders = {};
+            }
+            const newDir = await addNewFolder();
+            const folderAlias = await namePathAlias(loadJson);
+            loadJson.folders[folderAlias] = { root: newDir, main: false };
+          } catch (err) {
+            printErr = err.message;
+          }
+          break;
       case 'addUser':
         try {
           await addOneUser(loadJson);

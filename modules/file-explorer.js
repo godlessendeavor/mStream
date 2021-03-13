@@ -304,18 +304,27 @@ exports.setup = function(mstream, program) {
       return;
     }
 
-    //TODO: main path is hardcoded with name "collection" this should be configurable
-    var mainPath = program.getVPathInfo("media", req.user);
+    var mainPath;
+    Object.keys(program.folders).forEach( key => {
+      if (program.folders[key].main){
+        mainPath = program.getVPathInfo(key, req.user);
+      }
+    });
+    if (mainPath == undefined){
+      winston.info(`Could not find main path`); 
+      res.status(500).json({ error: `Could not find main path`});
+      return;
+    }
 
+    winston.info(`main path is ${mainPath.fullPath}`); 
     let files;
     try {
       files = fs.readdirSync(mainPath.fullPath);
     } catch (err) {
-      res.status(500).json({ error: "Could not read main directory" });
+      res.status(500).json({ error: `Could not read main directory ${mainPath.fullPath}`});
       return;
     }
 
-    var copied = false;
     //search for directory of band in main collection
     for (var i = 0; i < files.length; i++) {
       const filepath = fe.join(mainPath.fullPath, files[i]);
