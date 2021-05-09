@@ -705,6 +705,11 @@ $(document).ready(function () {
       if (err !== false) {
         return boilerplateFailure(res, err);        
       }
+      MSTREAMAPI.addAlbumToDB(res.newDir, function(res2, err2) {
+        if (err2 !== false) {
+          return boilerplateFailure(res2, err2);        
+        }
+      });
       iziToast.success({
         title: 'Album moved to main collection',
         position: 'topCenter',

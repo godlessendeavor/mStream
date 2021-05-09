@@ -90,6 +90,20 @@ exports.setup = function (mstream, program) {
     const scan = runScan(program);
     res.status((scan.error === true) ? 555 : 200).json({ status: scan.message });
   });
+
+  // Add one album to database
+  mstream.post('/db/add-album-to-db', (req, res) => {    
+    if (!req.body.albumDir ) {
+    return res.status(500).json({ error: `Bad input data missing Album directory`});
+    }
+    Object.keys(program.folders).forEach( key => {
+      if (program.folders[key].main){
+      scanIt(program.folders[key].root, req.body.albumDir, program, () => {
+        winston.info(`Added album ${req.body.albumDir} to db`);
+      });
+    }});
+    return res.status(200).json({ res: `Added album ${req.body.albumDir}`});
+  });
 }
 
 exports.runAfterBoot = function (program) {

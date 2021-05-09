@@ -113,6 +113,10 @@ var MSTREAMAPI = (function () {
     makeGETRequest("/db/recursive-scan", false, callback);
   }
 
+  mstreamModule.addAlbumToDB = function (albumDir, callback) {
+    makePOSTRequest("/db/add-album-to-db", {albumDir: albumDir}, callback);
+  }
+
   mstreamModule.rateSong = function (filepath, rating, callback) {
     makePOSTRequest("/db/rate-song", { filepath: filepath, rating: rating }, callback);
   }

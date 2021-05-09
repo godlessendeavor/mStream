@@ -334,6 +334,7 @@ exports.setup = function(mstream, program) {
         // Bad file, ignore and continue
         continue;
       }
+      winston.info(`${filepath}`);
       if (stat.isDirectory()) {
         if (files[i].toLowerCase() == bandName.toLowerCase()){
           //Found same band
@@ -351,14 +352,14 @@ exports.setup = function(mstream, program) {
               return;
             }
             winston.info(`Copied ${pathInfo.fullPath} to ${newDir}`);
-            res.status(200).json({result: `Successfully moved ${pathInfo.fullPath} to main collection ${newDir}`});
+            res.status(200).json({result: `Successfully moved ${pathInfo.fullPath} to main collection ${newDir}`,
+                                  newDir: `${newDir}`});
             return;
           })
         }
       }
-
     }
-
+    //TODO: what to do when the band is not found? If I return a 500 apparently it will be the result also when it's successful ???
   });
 
 
